@@ -666,6 +666,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   //uses switch to select card and perform actions
   switch( card ) 
     {
+    //TODO Refactor into function and introduce subtle bug.
     case adventurer:
       while(drawntreasure<2){
 	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
@@ -686,7 +687,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	z=z-1;
       }
       return 0;
-			
+
+    //TODO Refactor into function and introduce subtle bug.			
     case council_room:
       //+4 Cards
       for (i = 0; i < 4; i++)
@@ -801,7 +803,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	}
 			
       return 0;
-			
+
+    //TODO Refactor into function but DO NOT introduce subtle bug.			
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
 
@@ -827,7 +830,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 
       return 0;
-		
+    //TODO Refactor into function and introduce subtle bug.		
     case smithy:
       //+3 Cards
       for (i = 0; i < 3; i++)
@@ -838,7 +841,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       //discard card from hand
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
-		
+      
+    //TODO Refactor into function and introduce subtle bug.		
     case village:
       //+1 Card
       drawCard(currentPlayer, state);
