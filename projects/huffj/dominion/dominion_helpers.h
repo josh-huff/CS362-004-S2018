@@ -15,5 +15,6 @@ int card_adventurer(struct gameState *state, int currentPlayer);
 int card_council_room(struct gameState *state, int currentPlayer, int handPos);
 int card_remodel(struct gameState *state, int currentPlayer, int choice1, int choice2, int handPos);
 int card_smithy(struct gameState *state, int currentPlayer, int handPos);
+int asserttrue(int condition);
 
 #endif
