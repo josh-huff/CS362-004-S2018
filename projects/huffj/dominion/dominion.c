@@ -1384,6 +1384,21 @@ int updateCoins(int player, struct gameState *state, int bonus)
   return 0;
 }
 
+//TODO Custom assert method, to collect coverage and bug information without ending program execution
+int asserttrue(int condition){
+
+  if (condition){
+
+    printf("Test Passed\n");
+  }
+
+  else{
+
+    printf("Test Failed\n");
+  }
+}
+
+
 
 //end of dominion.c
 
