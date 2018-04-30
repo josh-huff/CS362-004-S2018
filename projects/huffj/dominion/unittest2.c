@@ -24,12 +24,6 @@
 
 void testWhoseTurn() {
 
-/*
-int whoseTurn(struct gameState *state) {
-  return state->whoseTurn;
-}
-*/
-
   int k[10] = {adventurer, feast, baron, mine, great_hall, 
                remodel, smithy, village, ambassador, embargo};
             
