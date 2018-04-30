@@ -16,48 +16,58 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <math.h>
 #include "dominion.h"
 #include "dominion_helpers.h"
+#include "interface.h"
 #include "rngs.h"
 
 void testIsGameOver() {
 
+  int k[10] = {adventurer, feast, baron, mine, great_hall, 
+               remodel, smithy, village, ambassador, embargo};
+            
+  int players = 2;
+  int seed = 1000;
+  struct gameState state; 
 
-	
-  //if stack of Province cards is empty, the game ends
-  if (state->supplyCount[province] == 0){
-
-    return 1;
-  }
-
-  //if three supply pile are at 0, the game ends
-  int i;
-  int j = 0;
-  for (i = 0; i < 25; i++){
+  memset(&state, 23, sizeof(struct gameState));
+  initializeGame(players, k, seed, &state);
   
-    if (state->supplyCount[i] == 0){
-	
-	  j++;
-    }
-  }
+  printf("TESTING isGameOver():\n");
 
-  if ( j >= 3){
+// Test 1 -- Game continues (returns false) if there are Province cards and no more than two piles are exhausted.
+  printf("Test: Province cards available and two supply piles exhausted.\n");
 
-    return 1;
-  }
+  // Card-Drawing Strategy -- a player has combo'ed off the Smithy and Village cards
+  state.supplyCount[province] = 1;
+  state.supplyCount[smithy] = 0;
+  state.supplyCount[village] = 0;
 
-  return 0;
+  asserttrue(isGameOver(&state), 0);
 
-  // Test 1 -- Game continues (returns false) if there are Province cards.
-  // Test 2 -- Game halts (returns true) if there are no more Province cards.
-  // Test 3 -- Game continues (returns false) if there are no more than two piles exhausted.
-  // Test 4 -- Game halts (returns true) if there are four or fewer players and no more than two piles exhausted.
-  // Test 5 -- Game continues (returns false) if there are more than four players and no more than three piles exhausted.
+// Test 2 -- Game halts (returns true) if there are no more Province cards.
+  printf("Test: No Province cards.\n");
+
+  state.supplyCount[province] = 0;
+  
+  asserttrue(isGameOver(&state), 1);
+      
+// Test 3 -- Game halts (returns true) if there are four or fewer players and more than two piles exhausted.
+  printf("Test: Three supply piles exhausted.\n");
+
+  // Card-Drawing Strategy -- a player has combo'ed off the Smithy and Village cards
+  state.supplyCount[province] = 1;
+  state.supplyCount[feast] = 0;
+  state.supplyCount[smithy] = 0;
+  state.supplyCount[village] = 0;  
+
+  asserttrue(isGameOver(&state), 1);
 
 }
 
 int main(int argc, char *argv[]){
-
+  
   testIsGameOver();
   return 0;
 }
