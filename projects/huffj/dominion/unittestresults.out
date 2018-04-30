@@ -1,0 +1,68 @@
+TESTING card_smithy():
+Test: Current player should receive exact 3 cards.
+Test Failed
+Test: 3 cards came from player's own pile.
+Test Failed
+Test: No state change to victory and kingdom card piles.
+Test Passed
+Test Passed
+TESTING card_adventurer():
+Test: Current player should have exactly 1 more card in hand.
+Test Failed
+Test: 2 cards came from player's own deck.
+Test Passed
+Test: No state change to victory and kingdom card piles.
+Test Passed
+Test:  No Treasure was Discarded. (possibly zero necessary tests)
+Test Not Applicable: No discards made.
+Test:  Only Treasure was Drawn. (two tests)
+Test Passed
+Test Passed
+TESTING card_remodel():
+Test: Current player should have exact same number of cards in hand.
+Test Passed
+Test: card came from supply piles.
+Test Passed
+Test: card value 4 or less. Test Pass means attempt to get Mine failed.
+Test Passed
+TESTING card_village():
+Test: Current player should have exact same number of cards in hand (discard Village, draw card).
+Test Failed
+Test: card came from player's deck.
+Test Failed
+Test: Players should net one more action.
+Test Failed
+TESTING isGameOver():
+Test: Province cards available and two supply piles exhausted.
+Test Passed
+Test: No Province cards.
+Test Passed
+Test: Three supply piles exhausted.
+Test Passed
+TESTING whoseTurn():
+Test: whoseTurn returns correct player.
+Test Passed
+Test: The turn has advanced. whoseTurn returns correct player.
+Test Passed
+Test: whoseTurn number is not greater than (n - 1), where n is the number of players in the game.
+Test Passed
+TESTING fullDeckCount():
+Test: fullDeckCount returns number of Village cards in each player's beginning deck. There should be none.
+Test Passed
+Test Passed
+Test: The first player has used three copper to buy a Village.
+Test Passed
+Test: Player two still has zero Villages.
+Test Passed
+TESTING supplyCount():
+Test: Game starts with 10 village cards.
+Test Passed
+Test: A village has been taken. Count updates.
+Test Passed
+File 'dominion.c'
+Lines executed:48.58% of 564
+Branches executed:56.35% of 417
+Taken at least once:37.65% of 417
+Calls executed:35.71% of 98
+Creating 'dominion.c.gcov'
+
