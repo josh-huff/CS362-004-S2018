@@ -20,13 +20,27 @@
 char inputChar()
 {
     // TODO: rewrite this function to produce random values
-    return ' ';
+    // Must include a space, brackets, parentheses, braces, a space, and lowercase letters.
+    // ASCII - 32, 40, 41, 91, 93, 123, 125, 97 - 122 
+    char randomCharacterArray[] = " ()[]{}abcdefghijklmnopqrstuvwxyz";
+    return randomCharacterArray[rand() % sizeof(randomCharacterArray) - 1];
 }
 
 char *inputString()
 {
     // TODO: rewrite this function to produce random values
-    return "";
+    // Must include lowercase letter and null
+    // ASCII - 97 - 122, 0
+    int i;
+    char randomStrArray[] ="abcdefghijklmnopqrstuvwxyz";
+    char* returnStr = malloc(6 * sizeof(char));
+    memset(returnStr, '\0', 6);
+    for (i = 0; i < 5; i++){
+    
+      returnStr[i] = randomStrArray[rand() % sizeof(randomStrArray) - 1];
+    }
+    
+    return returnStr;
 }
 
 void testme()
