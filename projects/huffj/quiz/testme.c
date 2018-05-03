@@ -22,7 +22,8 @@ char inputChar()
     // TODO: rewrite this function to produce random values
     // Must include a space, brackets, parentheses, braces, a space, and lowercase letters.
     // ASCII - 32, 40, 41, 91, 93, 123, 125, 97 - 122 
-    char randomCharacterArray[] = " ()[]{}abcdefghijklmnopqrstuvwxyz";
+    //char randomCharacterArray[] = " ()[]{}abcdefghijklmnopqrstuvwxyz";
+    char randomCharacterArray[] = " ()[]{}ax";
     return randomCharacterArray[rand() % sizeof(randomCharacterArray) - 1];
 }
 
@@ -32,7 +33,8 @@ char *inputString()
     // Must include lowercase letter and null
     // ASCII - 97 - 122, 0
     int i;
-    char randomStrArray[] ="abcdefghijklmnopqrstuvwxyz";
+    char randomStrArray[] ="abcderst";
+    //char randomStrArray[] ="abcdefghijklmnopqrstuvwxyz";
     char* returnStr = malloc(6 * sizeof(char));
     memset(returnStr, '\0', 6);
     for (i = 0; i < 5; i++){
