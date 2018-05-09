@@ -744,7 +744,7 @@ int card_smithy(struct gameState *state, int currentPlayer, int handPos){
   int i;
 
   //+3 Cards
-  for (i = 0; i < 4; i++){
+  for (i = 0; i < 3; i++){
 
     drawCard(currentPlayer, state);
   }
@@ -1385,20 +1385,173 @@ int updateCoins(int player, struct gameState *state, int bonus)
 }
 
 //TODO Custom assert method, to collect coverage and bug information without ending program execution
-int asserttrue(int condition){
+int asserttrue(int condition1, int condition2){
 
-  if (condition){
+  if (condition1 == condition2){
 
-    printf("Test Passed\n");
+    //printf("Test Passed\n");
+    return 1;
   }
 
   else{
 
     printf("Test Failed\n");
+    return 0;
   }
 }
 
+int compare_states(struct gameState *state1, struct gameState *state2, int player){
 
+  int k;
+  int failures = 0;
+
+  if(!asserttrue(state1->numPlayers, state2->numPlayers)){
+  
+    printf("Difference in number of players\n");
+    printf("Original: %d, Copy: %d\n", state1->numPlayers, state2->numPlayers);
+    failures++;
+  }
+  
+  for(k = 0; k < treasure_map+1; k++){
+
+    if(!asserttrue(state1->supplyCount[k], state2->supplyCount[k])){
+  
+      printf("Difference in supply.\n");
+      printf("Original: %d, Copy: %d\n", state1->supplyCount[k], state2->supplyCount[k]);
+      failures++;
+    }
+  }
+  
+  for(k = 0; k < treasure_map+1; k++){
+
+    if(!asserttrue(state1->embargoTokens[k], state2->embargoTokens[k])){
+  
+      printf("Difference in embargo tokens.\n");
+      printf("Original: %d, Copy: %d\n", state1->embargoTokens[k], state2->embargoTokens[k]);
+      failures++;
+    }
+  }
+  
+  if(!asserttrue(state1->outpostPlayed, state2->outpostPlayed)){
+  
+    printf("Difference in outpost played.\n");
+    printf("Original: %d, Copy: %d\n", state1->outpostPlayed, state2->outpostPlayed);
+    failures++;
+  }
+
+  if(!asserttrue(state1->outpostTurn, state2->outpostTurn)){
+  
+    printf("Difference in outpost turn.\n");
+    printf("Original: %d, Copy: %d\n", state1->outpostTurn, state2->outpostTurn);
+    failures++;
+  }
+
+  if(!asserttrue(state1->whoseTurn, state2->whoseTurn)){
+  
+    printf("Difference in whose turn.\n");
+    printf("Original: %d, Copy: %d\n", state1->whoseTurn, state2->whoseTurn);
+    failures++;
+  }
+
+  if(!asserttrue(state1->phase, state2->phase)){
+  
+    printf("Difference in phase.\n");
+    printf("Original: %d, Copy: %d\n", state1->phase, state2->phase);
+    failures++;
+  }
+
+  if(!asserttrue(state1->numActions, state2->numActions)){
+  
+    printf("Difference in number of actions.\n");
+    printf("Original: %d, Copy: %d\n", state1->numActions, state2->numActions);
+    failures++;
+  }
+
+  if(!asserttrue(state1->coins, state2->coins)){
+  
+    printf("Difference in number of coins.\n");
+    printf("Original: %d, Copy: %d\n", state1->coins, state2->coins);
+    failures++;
+  }
+
+  if(!asserttrue(state1->numBuys, state2->numBuys)){
+  
+    printf("Difference in number of buys.\n");
+    printf("Original: %d, Copy: %d\n", state1->numBuys, state2->numBuys);
+    failures++;
+  }
+
+
+  for(k = 0; k < state2->handCount[player]; k++){
+    
+    if(!asserttrue(state1->hand[player][k], state2->hand[player][k])){
+
+      printf("Difference in hand contents.\n");
+      printf("Original: %d, Copy: %d\n", state1->hand[player][k], state2->hand[player][k]);
+      failures++;
+    }    
+  }
+
+  if(!asserttrue(state1->handCount[player], state2->handCount[player])){
+  
+    printf("Difference in hand count.\n");
+    printf("Original: %d, Copy: %d\n", state1->handCount[player], state2->handCount[player]);
+    failures++;
+  }
+  
+  for(k = 0; k < state2->deckCount[player]; k++){
+    
+    if(!asserttrue(state1->deck[player][k], state2->deck[player][k])){
+
+      printf("Difference in deck contents.\n");
+      printf("Original: %d, Copy: %d\n", state1->deck[player][k], state2->deck[player][k]);
+      failures++;
+    }    
+  }
+  
+  if(!asserttrue(state1->deckCount[player], state2->deckCount[player])){
+  
+    printf("Difference in deck count.\n");
+    printf("Original: %d, Copy: %d\n", state1->deckCount[player], state2->deckCount[player]);
+    failures++;
+  }
+  
+  for(k = 0; k < state2->discardCount[player]; k++){
+    
+    if(!asserttrue(state1->discard[player][k], state2->discard[player][k])){
+
+      printf("Difference in discard contents.\n");
+      printf("Original: %d, Copy: %d\n", state1->discard[player][k], state2->discard[player][k]);
+      failures++;
+    }    
+  }      
+  
+  if(!asserttrue(state1->discardCount[player], state2->discardCount[player])){
+  
+    printf("Difference in discard count.\n");
+    printf("Original: %d, Copy: %d\n", state1->discardCount[player], state2->discardCount[player]);
+    failures++;
+  }       
+
+  for(k = 0; k < state2->playedCardCount; k++){
+    
+    if(!asserttrue(state1->playedCards[k], state2->playedCards[k])){
+
+      printf("Difference in played card contents.\n");
+      printf("Original: %d, Copy: %d\n", state1->playedCards[k], state2->playedCards[k]);
+      failures++;
+    }    
+  }      
+  
+  if(!asserttrue(state1->playedCardCount, state2->playedCardCount)){
+  
+    printf("Difference in played card count.\n");
+    printf("Original: %d, Copy: %d\n", state1->playedCardCount, state2->playedCardCount);
+    failures++;
+  }
+  
+  return failures;
+}
 
 //end of dominion.c
 

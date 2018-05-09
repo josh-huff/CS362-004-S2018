@@ -25,6 +25,7 @@
 
 int passed = 0;
 int failed = 0;
+int differences = 0;
 
 void randomTestSmithy(struct gameState *original_state, int player, int handPos) {
 
@@ -33,33 +34,12 @@ void randomTestSmithy(struct gameState *original_state, int player, int handPos)
   int r;  
   
   r = card_smithy(&state_copy, player, handPos);
+  
 
 // Test 1 -- Current player should receive exact 3 cards.
 // Test 2 -- 3 cards should come from his own pile.
 // Test 3 -- No state change should occur to the victory card piles and kingdom card piles.
 
-  // Simulate drawing three cards
-  int k;
-  for(k = 0; k < 3; k++){
-  
-    if (original_state->deckCount[player] > 0){
-    
-      original_state->handCount[player]++;
-      original_state->hand[player][original_state->handCount[player] - 1] = original_state->deck[player][original_state->handCount[player] - 1];
-      original_state->deckCount[player]--;
-    }
-    
-    else if (original_state->discardCount[player] > 0){
-    
-      memcpy(original_state->deck[player], state_copy.deck[player], sizeof(int) * original_state->discardCount[player]);
-      memcpy(original_state->discard[player], state_copy.discard[player], sizeof(int) * original_state->discardCount[player]);
-      original_state->hand[player][state_copy.handCount[player] - 1] = state_copy.hand[player][state_copy.handCount[player] - 1];
-      original_state->handCount[player]++;
-      original_state->deckCount[player] = original_state->discardCount[player] - 1;
-      original_state->discardCount[player] = 0;
-    }
-  }
-  
   // Simulate adding Smithy to played pile (pulled directly from dominion.c implementation of discardCard()
   original_state->playedCards[original_state->playedCardCount] = original_state->hand[player][handPos];
   original_state->playedCardCount++;  
@@ -83,6 +63,47 @@ void randomTestSmithy(struct gameState *original_state, int player, int handPos)
     original_state->handCount[player]--;
   } 
 
+// Draw three cards, check to see that the size of the hands, deck, and discard are the same. Then copy over the actual contents of hand, deck, and discard over and compare whole state
+
+  // Simulate drawing three cards
+  int k;
+  for(k = 0; k < 3; k++){
+  
+    if (original_state->deckCount[player] > 0){
+    
+      original_state->handCount[player]++;
+      original_state->hand[player][original_state->handCount[player] - 1] = original_state->deck[player][original_state->handCount[player] - 1];
+      original_state->deckCount[player]--;
+    }
+    
+    else if (original_state->discardCount[player] > 0){
+    
+      memcpy(original_state->deck[player], state_copy.deck[player], sizeof(int) * original_state->discardCount[player]);
+      memcpy(original_state->discard[player], state_copy.discard[player], sizeof(int) * original_state->discardCount[player]);
+      original_state->hand[player][state_copy.handCount[player] - 1] = state_copy.hand[player][state_copy.handCount[player] - 1];
+      original_state->handCount[player]++;
+      original_state->deckCount[player] = original_state->discardCount[player] - 1;
+      original_state->discardCount[player] = 0;
+    }
+  }
+  
+  // Copying card draws over so randomness of shuffle does not effect equality.
+  for(k = 0; k < state_copy.handCount[player]; k++){
+    
+    original_state->hand[player][k] = state_copy.hand[player][k];    
+  }
+  
+  for(k = 0; k < state_copy.deckCount[player]; k++){
+  
+    original_state->deck[player][k] = state_copy.deck[player][k];
+  }
+  
+  for(k = 0; k < state_copy.discardCount[player]; k++){
+
+    original_state->discard[player][k] = state_copy.discard[player][k];
+  }  
+
+  differences += compare_states(original_state, &state_copy, player);
   asserttrue(r, 0);
   //asserttrue(memcmp(&state_copy, original_state, sizeof(struct gameState)), 0);
   //if(memcmp(&state_copy, original_state, sizeof(struct gameState)) == 0){passed++;} else{failed++;} 
@@ -121,10 +142,10 @@ int main(int argc, char *argv[]){
     currentPlayer = floor(Random() * 2);
     state.numActions = floor(Random() * 5);
     state.coins = floor(Random() * 10);
-    state.numBuys = floor(Random() * 3);
+    //state.numBuys = floor(Random() * 3);
     state.whoseTurn = currentPlayer;
     state.phase = floor(Random() * 2);   
-    state.deckCount[currentPlayer] = floor(Random() * 97) + 3;
+    state.deckCount[currentPlayer] = floor(Random() * 97);
     state.discardCount[currentPlayer] = floor(Random() * 100);
     state.handCount[currentPlayer] = floor(Random() * 25);
     state.playedCardCount = floor(Random() * 25);
@@ -136,5 +157,6 @@ int main(int argc, char *argv[]){
   
   printf("Passed: %d\n", passed);  
   printf("Failed: %d\n", failed);
+  printf("Differences:%d\n", differences);
   return 0;
 }
