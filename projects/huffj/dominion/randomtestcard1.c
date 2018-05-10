@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
     state.numPlayers = 2;
     state.whoseTurn = currentPlayer;
 
-    state.handCount[currentPlayer] = floor(Random() * NORMAL_HAND_SIZE) + 1;
+    state.handCount[currentPlayer] = floor(Random() * NORMAL_HAND_SIZE);
     for(i = 0; i < state.handCount[currentPlayer]; i++){
       
       state.hand[currentPlayer][i] = floor(Random() * CARD_POOL);

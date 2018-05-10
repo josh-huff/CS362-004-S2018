@@ -661,7 +661,7 @@ int card_adventurer(struct gameState *state, int currentPlayer){
 	
 	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
 	
-	if (cardDrawn == copper || cardDrawn == gold || cardDrawn == gold){
+	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold){
 	
 	  drawntreasure++;
 	}
@@ -1400,6 +1400,7 @@ int asserttrue(int condition1, int condition2){
   }
 }
 
+// TODO Custom state comparison method. Counts the number of differences and returns them.
 int compare_states(struct gameState *state1, struct gameState *state2, int player){
 
   int k;
