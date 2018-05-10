@@ -68,7 +68,6 @@ void randomTestVillage(struct gameState *original_state, int player, int handPos
 
   if(!asserttrue(original_state->numActions, state_copy.numActions - 1)){
 
-    printf("Original: %d, Copy: %d\n", original_state->numActions, state_copy.numActions);
     differences++;
   } 
 
@@ -104,7 +103,7 @@ int main(int argc, char *argv[]){
     
     currentPlayer = floor(Random() * 2);
         
-    // "Sane" Randomization of State Attributes TODO UPDATE FOR VILLAGE
+    // "Sane" Randomization of State Attributes 
     state.numPlayers = 2;
     state.whoseTurn = currentPlayer;
 
