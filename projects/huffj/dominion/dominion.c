@@ -758,7 +758,7 @@ int card_smithy(struct gameState *state, int currentPlayer, int handPos){
 int card_village(struct gameState *state, int currentPlayer, int handPos){
 
   //+1 Card
-  drawCard(currentPlayer, state);
+  //drawCard(currentPlayer, state);
   drawCard(currentPlayer, state);
 			
   //+2 Actions
@@ -1395,7 +1395,7 @@ int asserttrue(int condition1, int condition2){
 
   else{
 
-    printf("Test Failed\n");
+    //printf("Test Failed\n");
     return 0;
   }
 }

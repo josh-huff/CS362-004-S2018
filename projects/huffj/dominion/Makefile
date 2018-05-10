@@ -21,6 +21,12 @@ testBuyCard: testDrawCard.c dominion.o rngs.o
 randomtestcard1: randomtestcard1.c dominion.o rngs.o interface.o
 	gcc -o randomtestcard1 -g randomtestcard1.c dominion.o rngs.o interface.o $(CFLAGS)
 
+randomtestcard2: randomtestcard2.c dominion.o rngs.o interface.o
+	gcc -o randomtestcard2 -g randomtestcard2.c dominion.o rngs.o interface.o $(CFLAGS)
+
+randomtestadventurer: randomtestadventurer.c dominion.o rngs.o interface.o
+	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o interface.o $(CFLAGS)
+
 unittest1: unittest1.c dominion.o rngs.o
 	gcc -o unittest1 -g  unittest1.c dominion.o rngs.o $(CFLAGS)
 

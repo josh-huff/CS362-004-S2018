@@ -9,7 +9,7 @@
 * Assignment 4 
 * -----------------
 *
-* Random Test for card_remodel in dominion.c
+* Random Test for card_village in dominion.c
 *
 *************************************************************/
 #include <stdio.h>
@@ -17,83 +17,128 @@
 #include <string.h>
 #include <assert.h>
 #include <math.h>
+#include <time.h>
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include "interface.h"
 #include "rngs.h"
 
-void testRemodel() {
+#define RANDOM_TEST_LOOPS 10000 
+#define NORMAL_DECK_SIZE 100
+#define NORMAL_HAND_SIZE 10
+#define CARD_POOL 26
 
-  int k[10] = {adventurer, feast, baron, mine, great_hall, 
-               remodel, smithy, village, ambassador, embargo};
-            
-  int players = 2;
-  int beforeHandSize;
-  int beforeVictory = 0;
-  int afterVictory = 0;
-  int beforeKingdom = 0;
-  int afterKingdom = 0;
-  int seed = 1000;
-  struct gameState state; 
+int differences = 0;
 
-  memset(&state, 23, sizeof(struct gameState));
-  initializeGame(players, k, seed, &state);
+void randomTestVillage(struct gameState *original_state, int player, int handPos){
 
-  beforeHandSize = state.handCount[0];
+  struct gameState state_copy;
+  memcpy(&state_copy, original_state, sizeof(struct gameState));
+
+  int r;  
+  r = card_village(&state_copy, player, handPos);
+  asserttrue(r, 0);
   
-  int i;
-  for (i = 0; i < 10; i++){
-  
-    beforeKingdom += k[i];
-  }
-  
-  int j;
-  for (j = 1; j < 4; j++){
-  
-    beforeVictory += state.supplyCount[j];
-  }
-  
-  int totalBeforeSupply = beforeKingdom + beforeVictory;
-  
-  printf("TESTING card_remodel():\n");
+  // Simulate adding Village to played pile
+  if(!asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
 
-  // Last card is "Remodel", second to last is target card.
-  int handPos = state.handCount[0];
-  int trashCard = state.handCount[0] - 1;
-  int choiceCard = silver;
-  card_remodel(&state, 0, choiceCard, trashCard, handPos);
+    differences++;
+  }    
 
-// Test 1 -- Current player should receive 1 new card and discard Remodel.
-  printf("Test: Current player should have exact same number of cards in hand.\n");
+  // Simulate having drawn a card (opponent is unchanged)     
+  if(!asserttrue(original_state->handCount[player], state_copy.handCount[player])){
 
-  asserttrue(state.handCount[0], beforeHandSize);
-
-// Test 2 -- Card should come from supply pile.
-  printf("Test: card came from supply piles.\n");
-
-  for (i = 0; i < 10; i++){
+    differences++;
+  }  
   
-    afterKingdom += k[i];
-  }
+  if(!asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
 
-  for (j = 1; j < 4; j++){
+    differences++;
+  }  
+
+  if(!asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
+
+    differences++;
+  }  
   
-    afterVictory += state.supplyCount[j];
-  }
-  
-  int totalAfterSupply = afterKingdom + afterVictory;
+  if(!asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
 
-  asserttrue(totalBeforeSupply, totalAfterSupply);
+    differences++;
+  }   
 
-// Test 3 -- Card should not be value greater than 4.
-  printf("Test: card value 4 or less. Test Pass means attempt to get Mine failed.\n");
-  choiceCard = mine;
-  asserttrue(card_remodel(&state, 0, choiceCard, trashCard, handPos), -1);
+  if(!asserttrue(original_state->numActions, state_copy.numActions - 1)){
+
+    printf("Original: %d, Copy: %d\n", original_state->numActions, state_copy.numActions);
+    differences++;
+  } 
 
 }
 
 int main(int argc, char *argv[]){
+
+  struct gameState state;
+
+  int k[10] = {adventurer, feast, baron, mine, great_hall, 
+               remodel, smithy, village, ambassador, embargo};
+
+  initializeGame(2, k, 2000, &state);
+  printf("RANDOM TESTING card_village():\n");
+
+  int i, n, currentPlayer, handPos; 
+  clock_t time_started, time_elapsed;
+  time_started = clock();
+
+  for(n = 0; n < RANDOM_TEST_LOOPS; n++){
+    
+    time_elapsed = clock() - time_started;
+    
+    if(((double)time_elapsed)/CLOCKS_PER_SEC > 295){
+        
+      return 0;
+    }
   
-  testRemodel();
+    for(i = 0; i < sizeof(struct gameState); i++){
+    
+      ((char*) &state)[i] = floor(Random() * 256);
+    }
+    
+    currentPlayer = floor(Random() * 2);
+        
+    // "Sane" Randomization of State Attributes TODO UPDATE FOR VILLAGE
+    state.numPlayers = 2;
+    state.whoseTurn = currentPlayer;
+
+    state.numActions = floor(Random() * 3 + 1);
+
+    state.handCount[currentPlayer] = floor(Random() * NORMAL_HAND_SIZE) + 1;
+    for(i = 0; i < state.handCount[currentPlayer]; i++){
+      
+      state.hand[currentPlayer][i] = floor(Random() * CARD_POOL);
+    }
+    
+    state.deckCount[currentPlayer] = floor(Random() * NORMAL_DECK_SIZE);
+    for(i = 0; i < state.deckCount[currentPlayer]; i++){
+      
+      state.deck[currentPlayer][i] = floor(Random() * CARD_POOL);
+    }
+    
+    state.discardCount[currentPlayer] = floor(Random() * NORMAL_DECK_SIZE);
+    for(i = 0; i < state.discardCount[currentPlayer]; i++){
+      
+      state.discard[currentPlayer][i] = floor(Random() * CARD_POOL);
+    }
+
+    state.playedCardCount = floor(Random() * NORMAL_HAND_SIZE);
+    for(i = 0; i < state.playedCardCount; i++){
+      
+      state.playedCards[i] = floor(Random() * CARD_POOL);
+    }  
+
+    handPos = floor(Random() * state.handCount[currentPlayer]);
+  
+    randomTestVillage(&state, currentPlayer, handPos);
+  }
+  
+  printf("Differences:%d\n", differences);
   return 0;
 }
