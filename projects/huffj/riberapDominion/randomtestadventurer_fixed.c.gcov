@@ -1,0 +1,244 @@
+        -:    0:Source:randomtestadventurer_fixed.c
+        -:    0:Graph:randomtestadventurer_fixed.gcno
+        -:    0:Data:randomtestadventurer_fixed.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************
+        -:    2:*
+        -:    3:* randomtestadventurer.c
+        -:    4:*
+        -:    5:* -----------------
+        -:    6:* Josh Huff 
+        -:    7:* huffj@oregonstate.edu
+        -:    8:* CS362 -- Spring 2018
+        -:    9:* Assignment 5 
+        -:   10:* -----------------
+        -:   11:*
+        -:   12:* Random Test for Paige Ribera's playAdventurer in dominion.c
+        -:   13:*
+        -:   14:*************************************************************/
+        -:   15:#include <stdio.h>
+        -:   16:#include <stdlib.h>
+        -:   17:#include <string.h>
+        -:   18:#include <assert.h>
+        -:   19:#include <math.h>
+        -:   20:#include <time.h>
+        -:   21:#include "dominion.h"
+        -:   22:#include "dominion_helpers.h"
+        -:   23:#include "interface.h"
+        -:   24:#include "rngs.h"
+        -:   25:
+        -:   26:#define RANDOM_TEST_LOOPS 10000 
+        -:   27:#define NORMAL_DECK_SIZE 100
+        -:   28:#define NORMAL_HAND_SIZE 10
+        -:   29:#define CARD_POOL 26
+        -:   30:
+        -:   31:int differences = 0;
+        -:   32:
+function randomTestAdventurer called 10000 returned 100% blocks executed 85%
+    10000:   33:void randomTestAdventurer(struct gameState *original_state, int player, int handPos) {
+        -:   34:
+        -:   35:
+        -:   36:  struct gameState state_copy;
+    10000:   37:  memcpy(&state_copy, original_state, sizeof(struct gameState));
+        -:   38:
+    10000:   39:  int drawntreasure = 0;
+    10000:   40:  int cardDrawn = 0;
+        -:   41:  int temphand[MAX_HAND];
+    10000:   42:  int currentPlayer = whoseTurn(&state_copy);   
+call    0 returned 100%
+        -:   43:  
+        -:   44:  int r;  
+    10000:   45:  r = playAdventurer(drawntreasure, &state_copy, currentPlayer, cardDrawn, temphand, handPos); 
+call    0 returned 100%
+    10000:   46:  r_asserttrue(r, 0);  
+call    0 returned 100%
+        -:   47:  
+        -:   48:  // Simulate adding Adventurer to played pile
+    10000:   49:  if(!r_asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:   50:
+    #####:   51:    differences++;
+        -:   52:  }  
+        -:   53:
+        -:   54:  // Simulate having two new cards in hand (opponent is unchanged)
+    10000:   55:  if(!r_asserttrue(original_state->handCount[player], state_copy.handCount[player] - 1)){
+call    0 returned 100%
+branch  1 taken 2% (fallthrough)
+branch  2 taken 98%
+        -:   56:
+      232:   57:    differences++;
+        -:   58:  }
+        -:   59:
+    10000:   60:  if(!r_asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:   61:
+    #####:   62:    differences++;
+        -:   63:  }  
+        -:   64:
+    10000:   65:  if(!r_asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:   66:
+    #####:   67:    differences++;
+        -:   68:  }  
+        -:   69:  
+    10000:   70:  if(!r_asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
+call    0 returned 100%
+branch  1 taken 0% (fallthrough)
+branch  2 taken 100%
+        -:   71:
+    #####:   72:    differences++;
+        -:   73:  }   
+        -:   74:
+        -:   75:  // Check that no treasure is discarded and nothing but treasure is drawn.
+        -:   76:  // I couldn't think of a more elegant way to do this and I am pressed for time.
+        -:   77:  int currentCard, j;
+    10000:   78:  int drawnLast = state_copy.handCount[player] - 1; 
+    30000:   79:  for(j = 0; j < 2; j++){    
+branch  0 taken 67%
+branch  1 taken 33% (fallthrough)
+        -:   80:    
+    20000:   81:    currentCard = state_copy.hand[player][drawnLast];
+    20000:   82:    if(!r_asserttrue(currentCard > 3 && currentCard < 7, 1)){
+branch  0 taken 99% (fallthrough)
+branch  1 taken 1%
+branch  2 taken 99% (fallthrough)
+branch  3 taken 1%
+call    4 returned 100%
+branch  5 taken 1% (fallthrough)
+branch  6 taken 99%
+        -:   83:
+      222:   84:      differences++;
+        -:   85:    }
+    20000:   86:    drawnLast--;
+        -:   87:  }  
+        -:   88:
+    10000:   89:  int discarded = abs(original_state->discardCount[player] - state_copy.discardCount[player]);
+    10000:   90:  int discardTop = state_copy.discardCount[player] - 1;
+   219165:   91:  for (j = 0; j < discarded; j++){
+branch  0 taken 95%
+branch  1 taken 5% (fallthrough)
+        -:   92:  
+   209165:   93:    currentCard = state_copy.discard[player][discardTop];
+   209165:   94:    if(!r_asserttrue(currentCard > 3 && currentCard < 7, 0)){
+branch  0 taken 71% (fallthrough)
+branch  1 taken 29%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+call    4 returned 100%
+branch  5 taken 0% (fallthrough)
+branch  6 taken 100%
+        -:   95:
+    #####:   96:      differences++;
+        -:   97:    }
+   209165:   98:    discardTop--;
+        -:   99:  }
+    10000:  100:}
+        -:  101:
+function main called 1 returned 100% blocks executed 98%
+        1:  102:int main(int argc, char *argv[]){
+        -:  103:
+        -:  104:  struct gameState state;
+        -:  105:
+        1:  106:  int k[10] = {adventurer, feast, baron, mine, great_hall, 
+        -:  107:               remodel, smithy, village, ambassador, embargo};
+        -:  108:
+        1:  109:  initializeGame(2, k, 2000, &state);
+call    0 returned 100%
+        1:  110:  printf("RANDOM TESTING playAdventurer():\n");
+call    0 returned 100%
+        -:  111:
+        -:  112:  int i, n, currentPlayer; 
+        -:  113:  clock_t time_started, time_elapsed;
+        1:  114:  time_started = clock();
+call    0 returned 100%
+        -:  115:  
+    10001:  116:  for(n = 0; n < RANDOM_TEST_LOOPS; n++){
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  117:    
+    10000:  118:    time_elapsed = clock() - time_started;
+call    0 returned 100%
+        -:  119:    
+    10000:  120:    if(((double)time_elapsed)/CLOCKS_PER_SEC > 295){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+        -:  121:        
+    #####:  122:      return 0;
+        -:  123:    }
+        -:  124:  
+263010000:  125:    for(i = 0; i < sizeof(struct gameState); i++){
+branch  0 taken 99%
+branch  1 taken 1% (fallthrough)
+        -:  126:    
+263000000:  127:      ((char*) &state)[i] = floor(Random() * 256);
+call    0 returned 100%
+        -:  128:    }
+        -:  129:    
+    10000:  130:    currentPlayer = floor(Random() * 2);
+call    0 returned 100%
+        -:  131:        
+        -:  132:    // "Sane" Randomization of State Attributes 
+    10000:  133:    state.numPlayers = 2;
+    10000:  134:    state.whoseTurn = currentPlayer;    
+        -:  135:    
+    10000:  136:    state.handCount[currentPlayer] = floor(Random() * NORMAL_HAND_SIZE);
+call    0 returned 100%
+    55739:  137:    for(i = 0; i < state.handCount[currentPlayer]; i++){
+branch  0 taken 82%
+branch  1 taken 18% (fallthrough)
+        -:  138:      
+    45739:  139:      state.hand[currentPlayer][i] = floor(Random() * CARD_POOL);
+call    0 returned 100%
+        -:  140:    }
+        -:  141:    
+    10000:  142:    state.deckCount[currentPlayer] = floor(Random() * NORMAL_DECK_SIZE);
+call    0 returned 100%
+   501809:  143:    for(i = 0; i < state.deckCount[currentPlayer]; i++){
+branch  0 taken 98%
+branch  1 taken 2% (fallthrough)
+        -:  144:      
+   491809:  145:      state.deck[currentPlayer][i] = floor(Random() * CARD_POOL);
+call    0 returned 100%
+        -:  146:    }
+        -:  147:    
+    10000:  148:    state.discardCount[currentPlayer] = floor(Random() * NORMAL_DECK_SIZE);
+call    0 returned 100%
+   498298:  149:    for(i = 0; i < state.discardCount[currentPlayer]; i++){
+branch  0 taken 98%
+branch  1 taken 2% (fallthrough)
+        -:  150:      
+   488298:  151:      state.discard[currentPlayer][i] = floor(Random() * CARD_POOL);
+call    0 returned 100%
+        -:  152:    }
+        -:  153:
+    10000:  154:    state.playedCardCount = floor(Random() * NORMAL_HAND_SIZE);
+call    0 returned 100%
+    55147:  155:    for(i = 0; i < state.playedCardCount; i++){
+branch  0 taken 82%
+branch  1 taken 18% (fallthrough)
+        -:  156:      
+    45147:  157:      state.playedCards[i] = floor(Random() * CARD_POOL);
+call    0 returned 100%
+        -:  158:    }    
+        -:  159:    
+        -:  160:    // New to Assignment 5
+        -:  161:    // Pick a random spot in the hand to hold Adventurer
+    10000:  162:    int handPos = floor(Random() * state.handCount[currentPlayer]);
+call    0 returned 100%
+    10000:  163:    state.hand[currentPlayer][handPos] = 13;
+        -:  164:  
+    10000:  165:    randomTestAdventurer(&state, currentPlayer, handPos);
+call    0 returned 100%
+        -:  166:  }
+        -:  167:  
+        1:  168:  printf("Differences:%d\n", differences);  
+call    0 returned 100%
+        1:  169:  return 0;
+        -:  170:}

@@ -1,0 +1,27 @@
+RANDOM TESTING playSmithy():
+Differences:2
+RANDOM TESTING playVillage():
+Differences:10000
+RANDOM TESTING playAdventurer():
+Differences:454
+File 'randomtestcard1_fixed.c'
+Lines executed:88.89% of 45
+Branches executed:100.00% of 24
+Taken at least once:79.17% of 24
+Calls executed:100.00% of 24
+Creating 'randomtestcard1_fixed.c.gcov'
+
+File 'randomtestcard2_fixed.c'
+Lines executed:87.50% of 48
+Branches executed:100.00% of 26
+Taken at least once:73.08% of 26
+Calls executed:100.00% of 26
+Creating 'randomtestcard2_fixed.c.gcov'
+
+File 'randomtestadventurer_fixed.c'
+Lines executed:90.32% of 62
+Branches executed:100.00% of 40
+Taken at least once:82.50% of 40
+Calls executed:100.00% of 27
+Creating 'randomtestadventurer_fixed.c.gcov'
+

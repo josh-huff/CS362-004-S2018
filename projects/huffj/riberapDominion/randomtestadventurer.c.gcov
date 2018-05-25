@@ -121,12 +121,12 @@ branch  6 taken 99%
         -:   88:
     10000:   89:  int discarded = abs(original_state->discardCount[player] - state_copy.discardCount[player]);
     10000:   90:  int discardTop = state_copy.discardCount[player] - 1;
-   266080:   91:  for (j = 0; j < discarded; j++){
+   266164:   91:  for (j = 0; j < discarded; j++){
 branch  0 taken 96%
 branch  1 taken 4% (fallthrough)
         -:   92:  
-   256080:   93:    currentCard = state_copy.discard[player][discardTop];
-   256080:   94:    if(!r_asserttrue(currentCard > 3 && currentCard < 7, 0)){
+   256164:   93:    currentCard = state_copy.discard[player][discardTop];
+   256164:   94:    if(!r_asserttrue(currentCard > 3 && currentCard < 7, 0)){
 branch  0 taken 73% (fallthrough)
 branch  1 taken 27%
 branch  2 taken 1% (fallthrough)
@@ -137,7 +137,7 @@ branch  6 taken 99%
         -:   95:
         2:   96:      differences++;
         -:   97:    }
-   256080:   98:    discardTop--;
+   256164:   98:    discardTop--;
         -:   99:  }
     10000:  100:}
         -:  101:

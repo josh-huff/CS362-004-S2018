@@ -39,9 +39,21 @@ void testAdventurer() {
   memset(&state, 23, sizeof(struct gameState));
   initializeGame(players, k, seed, &state);
 
+  int currentPlayer = whoseTurn(&state);
+  
   beforeHandSize = state.handCount[currentPlayer];
   beforeDeckSize = state.deckCount[currentPlayer];
   beforeDiscardSize = state.discardCount[currentPlayer];
+
+  // NEW TEST Criteria -- ensure opponent's hand and deck are unchanged
+  beforeOppHand = state.handCount[!currentPlayer];
+  beforeOppDeck = state.deckCount[!currentPlayer];
+  beforeOppDiscard = state.discardCount[!currentPlayer];
+
+  int handPos = beforeHandSize - 1;
+  int drawntreasure = 0;
+  int cardDrawn = 0;
+  int temphand[MAX_HAND];
   
   int i;
   for (i = 0; i < 10; i++){
@@ -55,15 +67,6 @@ void testAdventurer() {
     beforeVictory += state.supplyCount[j];
   }
   
-  int drawntreasure = 0;
-  int cardDrawn = 0;
-  int temphand[MAX_HAND];
-  int currentPlayer = whoseTurn(&state);
-  
-  // NEW TEST Criteria -- ensure opponent's hand and deck are unchanged
-  beforeOppHand = state.handCount[!currentPlayer];
-  beforeOppDeck = state.deckCount[!currentPlayer];
-  beforeOppDiscard = state.discardCount[!currentPlayer];
     
   printf("\n-----TESTING playAdventurer():\n");
   // Force one of the opening cards to be "Adventurer."
@@ -162,6 +165,9 @@ void testAdventurer() {
     }
     drawnLast--;
   }
+  
+  printf("Hand contents after playing Adventurer:\n");
+  printHand(currentPlayer, &state); 
 
 }
 

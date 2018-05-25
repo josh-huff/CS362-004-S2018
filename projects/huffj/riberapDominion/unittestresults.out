@@ -1,5 +1,5 @@
 
-TESTING playSmithy():
+-----TESTING playSmithy():
 Hand contents before playing Smithy:
 Player 0's hand:
 #  Card
@@ -31,7 +31,7 @@ Test Passed
 Test: No state change to victory and kingdom card piles.
 Test Passed
 
-TESTING playAdventurer():
+-----TESTING playAdventurer():
 Hand contents before playing Adventurer:
 Player 0's hand:
 #  Card
@@ -69,6 +69,18 @@ Test Not Applicable: No discards made.
 Test:  Only Treasure was Drawn. (two tests)
 Test Passed
 Test Passed
+Hand contents after playing Adventurer:
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Adventurer   
+5  Copper       
+6  Copper       
+7  Copper       
+
 TESTING cardEffect(remodel):
 Test: Current player should have exact same number of cards in hand.
 Test Failed
@@ -111,17 +123,17 @@ Test Passed
 Test: A village has been taken. Count updates.
 Test Passed
 File 'cardtest1.c'
-Lines executed:88.68% of 53
+Lines executed:88.89% of 54
 Branches executed:100.00% of 16
 Taken at least once:75.00% of 16
 Calls executed:76.92% of 26
 Creating 'cardtest1.c.gcov'
 
 File 'cardtest2.c'
-Lines executed:84.29% of 70
+Lines executed:84.93% of 73
 Branches executed:77.78% of 36
 Taken at least once:52.78% of 36
-Calls executed:72.73% of 33
+Calls executed:74.29% of 35
 Creating 'cardtest2.c.gcov'
 
 File 'cardtest3.c'

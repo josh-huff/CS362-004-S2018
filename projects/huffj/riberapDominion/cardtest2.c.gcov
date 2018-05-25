@@ -27,7 +27,7 @@
         -:   22:#include "interface.h"
         -:   23:#include "rngs.h"
         -:   24:
-function testAdventurer called 1 returned 100% blocks executed 73%
+function testAdventurer called 1 returned 100% blocks executed 74%
         1:   25:void testAdventurer() {
         -:   26:
         1:   27:  int k[10] = {adventurer, feast, baron, mine, great_hall, 
@@ -46,148 +46,151 @@ function testAdventurer called 1 returned 100% blocks executed 73%
         1:   40:  initializeGame(players, k, seed, &state);
 call    0 returned 100%
         -:   41:
-        1:   42:  beforeHandSize = state.handCount[0];
-        1:   43:  beforeDeckSize = state.deckCount[0];
-        1:   44:  beforeDiscardSize = state.discardCount[0];
-        -:   45:  
-        -:   46:  int i;
-       11:   47:  for (i = 0; i < 10; i++){
+        1:   42:  int currentPlayer = whoseTurn(&state);
+call    0 returned 100%
+        -:   43:  
+        1:   44:  beforeHandSize = state.handCount[currentPlayer];
+        1:   45:  beforeDeckSize = state.deckCount[currentPlayer];
+        1:   46:  beforeDiscardSize = state.discardCount[currentPlayer];
+        -:   47:
+        -:   48:  // NEW TEST Criteria -- ensure opponent's hand and deck are unchanged
+        1:   49:  beforeOppHand = state.handCount[!currentPlayer];
+        1:   50:  beforeOppDeck = state.deckCount[!currentPlayer];
+        1:   51:  beforeOppDiscard = state.discardCount[!currentPlayer];
+        -:   52:
+        1:   53:  int handPos = beforeHandSize - 1;
+        1:   54:  int drawntreasure = 0;
+        1:   55:  int cardDrawn = 0;
+        -:   56:  int temphand[MAX_HAND];
+        -:   57:  
+        -:   58:  int i;
+       11:   59:  for (i = 0; i < 10; i++){
 branch  0 taken 91%
 branch  1 taken 9% (fallthrough)
-        -:   48:  
-       10:   49:    beforeKingdom += k[i];
-        -:   50:  }
-        -:   51:  
-        -:   52:  int j;
-        4:   53:  for (j = 1; j < 4; j++){
+        -:   60:  
+       10:   61:    beforeKingdom += k[i];
+        -:   62:  }
+        -:   63:  
+        -:   64:  int j;
+        4:   65:  for (j = 1; j < 4; j++){
 branch  0 taken 75%
 branch  1 taken 25% (fallthrough)
-        -:   54:  
-        3:   55:    beforeVictory += state.supplyCount[j];
-        -:   56:  }
-        -:   57:  
-        1:   58:  int drawntreasure = 0;
-        1:   59:  int cardDrawn = 0;
-        -:   60:  int temphand[MAX_HAND];
-        1:   61:  int currentPlayer = whoseTurn(&state);
+        -:   66:  
+        3:   67:    beforeVictory += state.supplyCount[j];
+        -:   68:  }
+        -:   69:  
+        -:   70:    
+        1:   71:  printf("\n-----TESTING playAdventurer():\n");
 call    0 returned 100%
-        -:   62:  
-        -:   63:  // NEW TEST Criteria -- ensure opponent's hand and deck are unchanged
-        1:   64:  beforeOppHand = state.handCount[!currentPlayer];
-        1:   65:  beforeOppDeck = state.deckCount[!currentPlayer];
-        1:   66:  beforeOppDiscard = state.discardCount[!currentPlayer];
-        -:   67:    
-        1:   68:  printf("\nTESTING playAdventurer():\n");
+        -:   72:  // Force one of the opening cards to be "Adventurer."
+        1:   73:  state.hand[currentPlayer][beforeHandSize - 1] = 7;
+        1:   74:  printf("Hand contents before playing Adventurer:\n");
 call    0 returned 100%
-        -:   69:  // Force one of the opening cards to be "Adventurer."
-        1:   70:  state.hand[currentPlayer][beforeHandSize - 1] = 7;
-        1:   71:  printf("Hand contents before playing Adventurer:\n");
+        1:   75:  printHand(currentPlayer, &state);  
 call    0 returned 100%
-        1:   72:  printHand(currentPlayer, &state);  
-call    0 returned 100%
-        -:   73:
-        1:   74:  playAdventurer(drawntreasure, &state, currentPlayer, cardDrawn, temphand);
-call    0 returned 100%
-        -:   75:
-        -:   76:// Test 1 -- Current player should receive 2 cards.
-        1:   77:  printf("Test: Current player should have exactly 1 more card in hand.\n");
+        -:   76:
+        1:   77:  playAdventurer(drawntreasure, &state, currentPlayer, cardDrawn, temphand);
 call    0 returned 100%
         -:   78:
-        1:   79:  if(!asserttrue(state.handCount[currentPlayer], beforeHandSize + 1)){
+        -:   79:// Test 1 -- Current player should receive 2 cards.
+        1:   80:  printf("Test: Current player should have exactly 1 more card in hand.\n");
+call    0 returned 100%
+        -:   81:
+        1:   82:  if(!asserttrue(state.handCount[currentPlayer], beforeHandSize + 1)){
 call    0 returned 100%
 branch  1 taken 100% (fallthrough)
 branch  2 taken 0%
-        -:   80:  
-        1:   81:    printf("Hand size before drawing: %d\n", beforeHandSize);
+        -:   83:  
+        1:   84:    printf("Hand size before drawing: %d\n", beforeHandSize);
 call    0 returned 100%
-        1:   82:    printf("Hand size after drawing: %d\n", state.handCount[currentPlayer]);    
+        1:   85:    printf("Hand size after drawing: %d\n", state.handCount[currentPlayer]);    
 call    0 returned 100%
-        1:   83:    printHand(currentPlayer, &state);
+        1:   86:    printHand(currentPlayer, &state);
 call    0 returned 100%
-        -:   84:  }
-        -:   85:
-        -:   86:// Test 2 -- 2 cards should come from his own deck.
-        1:   87:  if(!asserttrue(state.deckCount[currentPlayer] + state.discardCount[currentPlayer], beforeDeckSize + beforeDiscardSize - 2)){
+        -:   87:  }
+        -:   88:
+        -:   89:// Test 2 -- 2 cards should come from his own deck.
+        1:   90:  if(!asserttrue(state.deckCount[currentPlayer] + state.discardCount[currentPlayer], beforeDeckSize + beforeDiscardSize - 2)){
 call    0 returned 100%
 branch  1 taken 100% (fallthrough)
 branch  2 taken 0%
-        -:   88:  
-        1:   89:    printf("Deck + discard size before drawing: %d\n", beforeDeckSize + beforeDiscardSize);
+        -:   91:  
+        1:   92:    printf("Deck + discard size before drawing: %d\n", beforeDeckSize + beforeDiscardSize);
 call    0 returned 100%
-        1:   90:    printf("Deck + discard size after drawing: %d\n", state.deckCount[currentPlayer] + state.discardCount[currentPlayer]);
+        1:   93:    printf("Deck + discard size after drawing: %d\n", state.deckCount[currentPlayer] + state.discardCount[currentPlayer]);
 call    0 returned 100%
-        -:   91:  }
-        -:   92:
-        -:   93:// NEW TEST, 2a
-        1:   94:  printf("Test: No cards came from opponent's deck.\n");
-call    0 returned 100%
+        -:   94:  }
         -:   95:
-        1:   96:  if(!asserttrue(state.deckCount[!currentPlayer] + state.handCount[!currentPlayer] + state.discardCount[!currentPlayer], 
+        -:   96:// NEW TEST, 2a
+        1:   97:  printf("Test: No cards came from opponent's deck.\n");
+call    0 returned 100%
+        -:   98:
+        1:   99:  if(!asserttrue(state.deckCount[!currentPlayer] + state.handCount[!currentPlayer] + state.discardCount[!currentPlayer], 
 call    0 returned 100%
 branch  1 taken 0% (fallthrough)
 branch  2 taken 100%
-        1:   97:                 beforeOppHand + beforeOppDeck + beforeOppDiscard)){
-        -:   98:    
-    #####:   99:    printf("Opponent Hand + deck + discard size before drawing: %d\n", beforeOppHand + beforeOppDeck + beforeOppDiscard);
+        1:  100:                 beforeOppHand + beforeOppDeck + beforeOppDiscard)){
+        -:  101:    
+    #####:  102:    printf("Opponent Hand + deck + discard size before drawing: %d\n", beforeOppHand + beforeOppDeck + beforeOppDiscard);
 call    0 never executed
-    #####:  100:    printf("Opponent Hand + deck + discard size after drawing: %d\n", state.deckCount[!currentPlayer] + state.handCount[!currentPlayer] + state.discardCount[!currentPlayer]);
+    #####:  103:    printf("Opponent Hand + deck + discard size after drawing: %d\n", state.deckCount[!currentPlayer] + state.handCount[!currentPlayer] + state.discardCount[!currentPlayer]);
 call    0 never executed
-        -:  101:  }               
-        -:  102:      
-        -:  103:// Test 3 -- No state change should occur to the victory card piles and kingdom card piles.
-        1:  104:  printf("Test: No state change to victory and kingdom card piles.\n");
+        -:  104:  }               
+        -:  105:      
+        -:  106:// Test 3 -- No state change should occur to the victory card piles and kingdom card piles.
+        1:  107:  printf("Test: No state change to victory and kingdom card piles.\n");
 call    0 returned 100%
-        -:  105:
-       11:  106:  for (i = 0; i < 10; i++){
+        -:  108:
+       11:  109:  for (i = 0; i < 10; i++){
 branch  0 taken 91%
 branch  1 taken 9% (fallthrough)
-        -:  107:  
-       10:  108:    afterKingdom += k[i];
-        -:  109:  }
-        -:  110:
-        4:  111:  for (j = 1; j < 4; j++){
+        -:  110:  
+       10:  111:    afterKingdom += k[i];
+        -:  112:  }
+        -:  113:
+        4:  114:  for (j = 1; j < 4; j++){
 branch  0 taken 75%
 branch  1 taken 25% (fallthrough)
-        -:  112:  
-        3:  113:    afterVictory += state.supplyCount[j];
-        -:  114:  }
-        -:  115:
-        1:  116:  if(!asserttrue(beforeKingdom, afterKingdom) || !asserttrue(beforeVictory, afterVictory)){
+        -:  115:  
+        3:  116:    afterVictory += state.supplyCount[j];
+        -:  117:  }
+        -:  118:
+        1:  119:  if(!asserttrue(beforeKingdom, afterKingdom) || !asserttrue(beforeVictory, afterVictory)){
 call    0 returned 100%
 branch  1 taken 100% (fallthrough)
 branch  2 taken 0%
 call    3 returned 100%
 branch  4 taken 0% (fallthrough)
 branch  5 taken 100%
-        -:  117:  
-    #####:  118:    printf("Kingdom size before drawing: %d\n", beforeKingdom);
+        -:  120:  
+    #####:  121:    printf("Kingdom size before drawing: %d\n", beforeKingdom);
 call    0 never executed
-    #####:  119:    printf("Kingdom size after drawing: %d\n", afterKingdom);
+    #####:  122:    printf("Kingdom size after drawing: %d\n", afterKingdom);
 call    0 never executed
-    #####:  120:    printf("Victory size before drawing: %d\n", beforeVictory);
+    #####:  123:    printf("Victory size before drawing: %d\n", beforeVictory);
 call    0 never executed
-    #####:  121:    printf("Victory size after drawing: %d\n", afterVictory);    
+    #####:  124:    printf("Victory size after drawing: %d\n", afterVictory);    
 call    0 never executed
-        -:  122:  }
-        -:  123:
-        -:  124:
-        -:  125:// Test 4 -- No Treasure was Discarded
-        1:  126:  printf("Test:  No Treasure was Discarded. (possibly zero necessary tests)\n");
+        -:  125:  }
+        -:  126:
+        -:  127:
+        -:  128:// Test 4 -- No Treasure was Discarded
+        1:  129:  printf("Test:  No Treasure was Discarded. (possibly zero necessary tests)\n");
 call    0 returned 100%
-        -:  127:  
-        1:  128:  int discarded = abs(beforeDiscardSize - state.discardCount[currentPlayer]);
-        1:  129:  int discardTop = state.discardCount[currentPlayer] - 1;
-        -:  130:  int m;
-        -:  131:
-        1:  132:  if (discarded != 0){
+        -:  130:  
+        1:  131:  int discarded = abs(beforeDiscardSize - state.discardCount[currentPlayer]);
+        1:  132:  int discardTop = state.discardCount[currentPlayer] - 1;
+        -:  133:  int m;
+        -:  134:
+        1:  135:  if (discarded != 0){
 branch  0 taken 0% (fallthrough)
 branch  1 taken 100%
-        -:  133:
-    #####:  134:    for (m = 0; m < discarded; m++){
+        -:  136:
+    #####:  137:    for (m = 0; m < discarded; m++){
 branch  0 never executed
 branch  1 never executed
-        -:  135:  
-    #####:  136:      if(!asserttrue(state.discard[currentPlayer][discardTop] > 3 && state.discard[currentPlayer][discardTop] < 7, 0)){
+        -:  138:  
+    #####:  139:      if(!asserttrue(state.discard[currentPlayer][discardTop] > 3 && state.discard[currentPlayer][discardTop] < 7, 0)){
 branch  0 never executed
 branch  1 never executed
 branch  2 never executed
@@ -195,33 +198,33 @@ branch  3 never executed
 call    4 never executed
 branch  5 never executed
 branch  6 never executed
-        -:  137:      
-        -:  138:        //printf("Card in discard pile is %d\n", state.discard[currentPlayer][discardTop]);
-    #####:  139:        printDiscard(currentPlayer, &state);
+        -:  140:      
+        -:  141:        //printf("Card in discard pile is %d\n", state.discard[currentPlayer][discardTop]);
+    #####:  142:        printDiscard(currentPlayer, &state);
 call    0 never executed
-        -:  140:      }
-    #####:  141:      discardTop--;
-        -:  142:    }
-        -:  143:  }
-        -:  144:  
-        -:  145:  else{
-        -:  146:  
-        1:  147:    printf("Test Not Applicable: No discards made.\n");
-call    0 returned 100%
-        -:  148:  }
+        -:  143:      }
+    #####:  144:      discardTop--;
+        -:  145:    }
+        -:  146:  }
+        -:  147:  
+        -:  148:  else{
         -:  149:  
-        -:  150:  
-        -:  151:// Test 5 -- Only Treasure was Drawn
-        1:  152:  printf("Test:  Only Treasure was Drawn. (two tests)\n");
+        1:  150:    printf("Test Not Applicable: No discards made.\n");
 call    0 returned 100%
+        -:  151:  }
+        -:  152:  
         -:  153:  
-        -:  154:  int n;
-        1:  155:  int drawnLast = state.handCount[currentPlayer] - 1;
-        3:  156:  for (n = 0; n < 2; n++){
+        -:  154:// Test 5 -- Only Treasure was Drawn
+        1:  155:  printf("Test:  Only Treasure was Drawn. (two tests)\n");
+call    0 returned 100%
+        -:  156:  
+        -:  157:  int n;
+        1:  158:  int drawnLast = state.handCount[currentPlayer] - 1;
+        3:  159:  for (n = 0; n < 2; n++){
 branch  0 taken 67%
 branch  1 taken 33% (fallthrough)
-        -:  157:  
-        2:  158:    if(!asserttrue(state.hand[currentPlayer][drawnLast] > 3 && state.hand[currentPlayer][drawnLast] < 7, 1)){
+        -:  160:  
+        2:  161:    if(!asserttrue(state.hand[currentPlayer][drawnLast] > 3 && state.hand[currentPlayer][drawnLast] < 7, 1)){
 branch  0 taken 100% (fallthrough)
 branch  1 taken 0%
 branch  2 taken 100% (fallthrough)
@@ -229,20 +232,25 @@ branch  3 taken 0%
 call    4 returned 100%
 branch  5 taken 0% (fallthrough)
 branch  6 taken 100%
-        -:  159:      
-        -:  160:      //printf("Last drawn card is %d\n", state.hand[currentPlayer][drawnLast]);
-    #####:  161:      printHand(currentPlayer, &state);
+        -:  162:      
+        -:  163:      //printf("Last drawn card is %d\n", state.hand[currentPlayer][drawnLast]);
+    #####:  164:      printHand(currentPlayer, &state);
 call    0 never executed
-        -:  162:    }
-        2:  163:    drawnLast--;
-        -:  164:  }
-        -:  165:
-        1:  166:}
-        -:  167:
-function main called 1 returned 100% blocks executed 100%
-        1:  168:int main(int argc, char *argv[]){
-        -:  169:  
-        1:  170:  testAdventurer();
+        -:  165:    }
+        2:  166:    drawnLast--;
+        -:  167:  }
+        -:  168:  
+        1:  169:  printf("Hand contents after playing Adventurer:\n");
 call    0 returned 100%
-        1:  171:  return 0;
-        -:  172:}
+        1:  170:  printHand(currentPlayer, &state); 
+call    0 returned 100%
+        -:  171:
+        1:  172:}
+        -:  173:
+function main called 1 returned 100% blocks executed 100%
+        1:  174:int main(int argc, char *argv[]){
+        -:  175:  
+        1:  176:  testAdventurer();
+call    0 returned 100%
+        1:  177:  return 0;
+        -:  178:}

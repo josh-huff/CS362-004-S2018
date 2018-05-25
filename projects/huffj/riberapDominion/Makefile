@@ -65,6 +65,28 @@ cardtest3: cardtest3.c dominion.o rngs.o
 	
 cardtest4: cardtest4.c dominion.o rngs.o
 	gcc -o cardtest4 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)	
+
+dominion_fixed.o: dominion.h dominion_fixed.c rngs.o
+	gcc -c dominion_fixed.c -g  $(CFLAGS)
+
+fixedtest.out: cardtest1_fixed.c cardtest2_fixed.c dominion_fixed.c rngs.c
+	gcc -o cardtest1_fixed -g  cardtest1_fixed.c dominion_fixed.o rngs.o interface.o $(CFLAGS)
+	gcc -o cardtest2_fixed -g  cardtest2_fixed.c dominion_fixed.o rngs.o interface.o $(CFLAGS)
+	./cardtest1_fixed >> fixedtestresults.out
+	./cardtest2_fixed >> fixedtestresults.out    
+	gcov cardtest1_fixed.c -b >> fixedtestresults.out
+	gcov cardtest2_fixed.c -b >> fixedtestresults.out
+	
+fixedrandom.out: randomtestcard1_fixed.c randomtestcard2_fixed.c randomtestadventurer_fixed.c dominion_fixed.o rngs.o
+	gcc -o randomtestcard1_fixed -g  randomtestcard1_fixed.c dominion_fixed.o rngs.o interface.o $(CFLAGS)
+	gcc -o randomtestcard2_fixed -g  randomtestcard2_fixed.c dominion_fixed.o rngs.o interface.o $(CFLAGS)    
+	gcc -o randomtestadventurer_fixed -g  randomtestadventurer_fixed.c dominion_fixed.o rngs.o interface.o $(CFLAGS)   
+	./randomtestcard1_fixed >> fixedrandomresults.out
+	./randomtestcard2_fixed >> fixedrandomresults.out   
+	./randomtestadventurer_fixed >> fixedrandomresults.out   	 
+	gcov randomtestcard1_fixed.c -b >> fixedrandomresults.out
+	gcov randomtestcard2_fixed.c -b >> fixedrandomresults.out
+	gcov randomtestadventurer_fixed.c -b >> fixedrandomresults.out
 	
 unittestresults.out: cardtest1.c cardtest2.c cardtest3.c cardtest4.c unittest1.c unittest2.c unittest3.c unittest4.c dominion.c rngs.c
 	gcc -o unittest1 -g  unittest1.c dominion.o rngs.o interface.o $(CFLAGS)

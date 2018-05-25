@@ -1,0 +1,67 @@
+
+-----TESTING playSmithy():
+Hand contents before playing Smithy:
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Smithy       
+
+Test: Current player should receive exact 3 cards.
+Test Passed
+Test: Three cards came from the sum of player's deck and discard piles.
+Test Passed
+Test: No cards came from opponent's deck, discard, or hand.
+Test Passed
+Test: No state change to victory and kingdom card piles.
+Test Passed
+
+-----TESTING playAdventurer():
+Hand contents before playing Adventurer:
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Adventurer   
+
+Test: Current player should have exactly 1 more card in hand.
+Test Passed
+Test Passed
+Test: No cards came from opponent's deck.
+Test Passed
+Test: No state change to victory and kingdom card piles.
+Test Passed
+Test Passed
+Test:  No Treasure was Discarded. (possibly zero necessary tests)
+Test Not Applicable: No discards made.
+Test:  Only Treasure was Drawn. (two tests)
+Test Passed
+Test Passed
+Hand contents after playing Adventurer:
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Copper       
+5  Copper       
+
+File 'cardtest1_fixed.c'
+Lines executed:79.63% of 54
+Branches executed:100.00% of 16
+Taken at least once:75.00% of 16
+Calls executed:57.69% of 26
+Creating 'cardtest1_fixed.c.gcov'
+
+File 'cardtest2_fixed.c'
+Lines executed:78.08% of 73
+Branches executed:77.78% of 36
+Taken at least once:52.78% of 36
+Calls executed:60.00% of 35
+Creating 'cardtest2_fixed.c.gcov'
+
