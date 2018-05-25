@@ -1,0 +1,130 @@
+        -:    0:Source:cardtest3.c
+        -:    0:Graph:cardtest3.gcno
+        -:    0:Data:cardtest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************
+        -:    2:*
+        -:    3:* cardtest3.c
+        -:    4:*
+        -:    5:* -----------------
+        -:    6:* Josh Huff 
+        -:    7:* huffj@oregonstate.edu
+        -:    8:* CS362 -- Spring 2018
+        -:    9:* Assignment 5 
+        -:   10:* -----------------
+        -:   11:*
+        -:   12:* Unit Test for Paige Ribera's cardEffect(remodel) in dominion.c
+        -:   13:*
+        -:   14:*************************************************************/
+        -:   15:#include <stdio.h>
+        -:   16:#include <stdlib.h>
+        -:   17:#include <string.h>
+        -:   18:#include <assert.h>
+        -:   19:#include <math.h>
+        -:   20:#include "dominion.h"
+        -:   21:#include "dominion_helpers.h"
+        -:   22:#include "interface.h"
+        -:   23:#include "rngs.h"
+        -:   24:
+function testRemodel called 1 returned 100% blocks executed 100%
+        1:   25:void testRemodel() {
+        -:   26:
+        1:   27:  int k[10] = {adventurer, feast, baron, mine, great_hall, 
+        -:   28:               remodel, smithy, village, ambassador, embargo};
+        -:   29:            
+        1:   30:  int players = 2;
+        -:   31:  int beforeHandSize;
+        1:   32:  int beforeVictory = 0;
+        1:   33:  int afterVictory = 0;
+        1:   34:  int beforeKingdom = 0;
+        1:   35:  int afterKingdom = 0;
+        1:   36:  int seed = 1000;
+        -:   37:  struct gameState state; 
+        -:   38:
+        1:   39:  memset(&state, 23, sizeof(struct gameState));
+        1:   40:  initializeGame(players, k, seed, &state);
+call    0 returned 100%
+        -:   41:
+        1:   42:  beforeHandSize = state.handCount[0];
+        -:   43:  
+        -:   44:  int i;
+       11:   45:  for (i = 0; i < 10; i++){
+branch  0 taken 91%
+branch  1 taken 9% (fallthrough)
+        -:   46:  
+       10:   47:    beforeKingdom += k[i];
+        -:   48:  }
+        -:   49:  
+        -:   50:  int j;
+        4:   51:  for (j = 1; j < 4; j++){
+branch  0 taken 75%
+branch  1 taken 25% (fallthrough)
+        -:   52:  
+        3:   53:    beforeVictory += state.supplyCount[j];
+        -:   54:  }
+        -:   55:  
+        1:   56:  int totalBeforeSupply = beforeKingdom + beforeVictory;
+        -:   57:  
+        1:   58:  printf("TESTING cardEffect(remodel):\n");
+call    0 returned 100%
+        -:   59:
+        -:   60:  // Last card is "Remodel", second to last is target card.
+        1:   61:  int handPos = state.handCount[0];
+        1:   62:  int trashCard = state.handCount[0] - 1;
+        1:   63:  int choiceCard = silver;
+        -:   64:  // OLD TEST CALL: card_remodel(&state, 0, choiceCard, trashCard, handPos);
+        -:   65:  // NEW TEST CALL:
+        -:   66:  //cardEffect(remodel, choice1, choice2, choice3(dummy value, not relevant to remodel), state, handPos, bonus (dummy value));
+        1:   67:  cardEffect(remodel, trashCard, choiceCard, 0, &state, handPos, 0);
+call    0 returned 100%
+        -:   68:  
+        -:   69:
+        -:   70:// Test 1 -- Current player should receive 1 new card and discard Remodel.
+        1:   71:  printf("Test: Current player should have exact same number of cards in hand.\n");
+call    0 returned 100%
+        -:   72:
+        1:   73:  asserttrue(state.handCount[0], beforeHandSize);
+call    0 returned 100%
+        -:   74:
+        -:   75:// Test 2 -- Card should come from supply pile.
+        1:   76:  printf("Test: card came from supply piles.\n");
+call    0 returned 100%
+        -:   77:
+       11:   78:  for (i = 0; i < 10; i++){
+branch  0 taken 91%
+branch  1 taken 9% (fallthrough)
+        -:   79:  
+       10:   80:    afterKingdom += k[i];
+        -:   81:  }
+        -:   82:
+        4:   83:  for (j = 1; j < 4; j++){
+branch  0 taken 75%
+branch  1 taken 25% (fallthrough)
+        -:   84:  
+        3:   85:    afterVictory += state.supplyCount[j];
+        -:   86:  }
+        -:   87:  
+        1:   88:  int totalAfterSupply = afterKingdom + afterVictory;
+        -:   89:
+        1:   90:  asserttrue(totalBeforeSupply, totalAfterSupply);
+call    0 returned 100%
+        -:   91:
+        -:   92:// Test 3 -- Card should not be value greater than 4.
+        1:   93:  printf("Test: card value 4 or less. Test Pass means attempt to get Mine failed.\n");
+call    0 returned 100%
+        1:   94:  choiceCard = mine;
+        -:   95:  //asserttrue(card_remodel(&state, 0, choiceCard, trashCard, handPos), -1);
+        1:   96:  asserttrue(cardEffect(remodel, trashCard, choiceCard, 0, &state, handPos, 0), -1);
+call    0 returned 100%
+call    1 returned 100%
+        -:   97:
+        1:   98:}
+        -:   99:
+function main called 1 returned 100% blocks executed 100%
+        1:  100:int main(int argc, char *argv[]){
+        -:  101:  
+        1:  102:  testRemodel();
+call    0 returned 100%
+        1:  103:  return 0;
+        -:  104:}

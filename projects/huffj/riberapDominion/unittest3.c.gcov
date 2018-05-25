@@ -1,0 +1,85 @@
+        -:    0:Source:unittest3.c
+        -:    0:Graph:unittest3.gcno
+        -:    0:Data:unittest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************
+        -:    2:*
+        -:    3:* unittest3.c
+        -:    4:*
+        -:    5:* -----------------
+        -:    6:* Josh Huff 
+        -:    7:* huffj@oregonstate.edu
+        -:    8:* CS362 -- Spring 2018
+        -:    9:* Assignment 3 
+        -:   10:* -----------------
+        -:   11:*
+        -:   12:* Unit Test for testFullDeckCount() in dominion.c
+        -:   13:*
+        -:   14:*************************************************************/
+        -:   15:#include <stdio.h>
+        -:   16:#include <stdlib.h>
+        -:   17:#include <string.h>
+        -:   18:#include <assert.h>
+        -:   19:#include <math.h>
+        -:   20:#include "dominion.h"
+        -:   21:#include "dominion_helpers.h"
+        -:   22:#include "interface.h"
+        -:   23:#include "rngs.h"
+        -:   24:
+function testFullDeckCount called 1 returned 100% blocks executed 100%
+        1:   25:void testFullDeckCount() {
+        -:   26:
+        1:   27:  int k[10] = {adventurer, feast, baron, mine, great_hall, 
+        -:   28:               remodel, smithy, village, ambassador, embargo};
+        -:   29:            
+        1:   30:  int players = 2;
+        1:   31:  int seed = 1000;
+        -:   32:  struct gameState state; 
+        -:   33:
+        1:   34:  memset(&state, 23, sizeof(struct gameState));
+        1:   35:  initializeGame(players, k, seed, &state);
+call    0 returned 100%
+        -:   36:  
+        1:   37:  printf("TESTING fullDeckCount():\n");
+call    0 returned 100%
+        -:   38:	
+        -:   39:	
+        -:   40:// Test 1 -- testFullDeckCount accurately finds the number of instances of the card in the player's beginning deck
+        1:   41:  printf("Test: fullDeckCount returns number of Village cards in each player's beginning deck. There should be none.\n");
+call    0 returned 100%
+        -:   42:
+        1:   43:  asserttrue(fullDeckCount(0, village, &state), 0);
+call    0 returned 100%
+call    1 returned 100%
+        1:   44:  asserttrue(fullDeckCount(1, village, &state), 0);
+call    0 returned 100%
+call    1 returned 100%
+        -:   45:
+        -:   46:// Test 2 -- testFullDeckCount accurately finds the number of instances of the card in the player's changed deck
+        1:   47:  printf("Test: The first player has used three copper to buy a Village.\n");
+call    0 returned 100%
+        -:   48:
+        1:   49:  state.discard[0][state.discardCount[0]] = village; 
+        1:   50:  state.discardCount[0]++; 
+        1:   51:  asserttrue(fullDeckCount(0, village, &state), 1);
+call    0 returned 100%
+call    1 returned 100%
+        -:   52:
+        -:   53:// Test 3 -- testFullDeckCount ensures the second player's deck hasn't been altered.
+        1:   54:  printf("Test: Player two still has zero Villages.\n");
+call    0 returned 100%
+        -:   55:
+        1:   56:  asserttrue(fullDeckCount(1, village, &state), 0);
+call    0 returned 100%
+call    1 returned 100%
+        -:   57:
+        1:   58:}
+        -:   59:
+function main called 1 returned 100% blocks executed 100%
+        1:   60:int main(int argc, char *argv[]){
+        -:   61:
+        1:   62:  testFullDeckCount();
+call    0 returned 100%
+        1:   63:  return 0;
+        -:   64:}

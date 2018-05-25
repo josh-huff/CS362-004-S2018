@@ -1,0 +1,163 @@
+
+TESTING playSmithy():
+Hand contents before playing Smithy:
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Smithy       
+
+Test: Current player should receive exact 3 cards.
+Test Failed
+Hand size before drawing: 5
+Hand size after drawing: 6
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Copper       
+5  Copper       
+
+Test: Three cards came from the sum of player's deck and discard piles.
+Test Failed
+Deck + discard size before playing Smithy: 5
+Deck + discard size after playing Smithy: 3
+Test: No cards came from opponent's deck, discard, or hand.
+Test Passed
+Test: No state change to victory and kingdom card piles.
+Test Passed
+
+TESTING playAdventurer():
+Hand contents before playing Adventurer:
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Adventurer   
+
+Test: Current player should have exactly 1 more card in hand.
+Test Failed
+Hand size before drawing: 5
+Hand size after drawing: 8
+Player 0's hand:
+#  Card
+0  Copper       
+1  Copper       
+2  Estate       
+3  Copper       
+4  Adventurer   
+5  Copper       
+6  Copper       
+7  Copper       
+
+Test Failed
+Deck + discard size before drawing: 5
+Deck + discard size after drawing: 2
+Test: No cards came from opponent's deck.
+Test Passed
+Test: No state change to victory and kingdom card piles.
+Test Passed
+Test Passed
+Test:  No Treasure was Discarded. (possibly zero necessary tests)
+Test Not Applicable: No discards made.
+Test:  Only Treasure was Drawn. (two tests)
+Test Passed
+Test Passed
+TESTING cardEffect(remodel):
+Test: Current player should have exact same number of cards in hand.
+Test Failed
+Test: card came from supply piles.
+Test Passed
+Test: card value 4 or less. Test Pass means attempt to get Mine failed.
+Test Failed
+TESTING playVillage:
+Test: Current player should have exact same number of cards in hand (discard Village, draw card).
+Test Passed
+Test: card came from player's deck.
+Test Failed
+Test: Players should net one more action.
+Test Failed
+TESTING isGameOver():
+Test: Province cards available and two supply piles exhausted.
+Test Passed
+Test: No Province cards.
+Test Passed
+Test: Three supply piles exhausted.
+Test Passed
+TESTING whoseTurn():
+Test: whoseTurn returns correct player.
+Test Passed
+Test: The turn has advanced. whoseTurn returns correct player.
+Test Passed
+Test: whoseTurn number is not greater than (n - 1), where n is the number of players in the game.
+Test Passed
+TESTING fullDeckCount():
+Test: fullDeckCount returns number of Village cards in each player's beginning deck. There should be none.
+Test Passed
+Test Passed
+Test: The first player has used three copper to buy a Village.
+Test Passed
+Test: Player two still has zero Villages.
+Test Passed
+TESTING supplyCount():
+Test: Game starts with 10 village cards.
+Test Passed
+Test: A village has been taken. Count updates.
+Test Passed
+File 'cardtest1.c'
+Lines executed:88.68% of 53
+Branches executed:100.00% of 16
+Taken at least once:75.00% of 16
+Calls executed:76.92% of 26
+Creating 'cardtest1.c.gcov'
+
+File 'cardtest2.c'
+Lines executed:84.29% of 70
+Branches executed:77.78% of 36
+Taken at least once:52.78% of 36
+Calls executed:72.73% of 33
+Creating 'cardtest2.c.gcov'
+
+File 'cardtest3.c'
+Lines executed:100.00% of 37
+Branches executed:100.00% of 8
+Taken at least once:100.00% of 8
+Calls executed:100.00% of 11
+Creating 'cardtest3.c.gcov'
+
+File 'cardtest4.c'
+Lines executed:100.00% of 24
+No branches
+Calls executed:100.00% of 11
+Creating 'cardtest4.c.gcov'
+
+File 'unittest1.c'
+Lines executed:100.00% of 25
+No branches
+Calls executed:100.00% of 12
+Creating 'unittest1.c.gcov'
+
+File 'unittest2.c'
+Lines executed:100.00% of 21
+No branches
+Calls executed:100.00% of 16
+Creating 'unittest2.c.gcov'
+
+File 'unittest3.c'
+Lines executed:100.00% of 20
+No branches
+Calls executed:100.00% of 14
+Creating 'unittest3.c.gcov'
+
+File 'unittest4.c'
+Lines executed:100.00% of 16
+No branches
+Calls executed:100.00% of 9
+Creating 'unittest4.c.gcov'
+

@@ -1,0 +1,90 @@
+        -:    0:Source:cardtest4.c
+        -:    0:Graph:cardtest4.gcno
+        -:    0:Data:cardtest4.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************
+        -:    2:*
+        -:    3:* cardtest4.c
+        -:    4:*
+        -:    5:* -----------------
+        -:    6:* Josh Huff 
+        -:    7:* huffj@oregonstate.edu
+        -:    8:* CS362 -- Spring 2018
+        -:    9:* Assignment 5
+        -:   10:* -----------------
+        -:   11:*
+        -:   12:* Unit Test for Paige Ribera's playVillage in dominion.c
+        -:   13:*
+        -:   14:*************************************************************/
+        -:   15:#include <stdio.h>
+        -:   16:#include <stdlib.h>
+        -:   17:#include <string.h>
+        -:   18:#include <assert.h>
+        -:   19:#include <math.h>
+        -:   20:#include "dominion.h"
+        -:   21:#include "dominion_helpers.h"
+        -:   22:#include "interface.h"
+        -:   23:#include "rngs.h"
+        -:   24:
+function testVillage called 1 returned 100% blocks executed 100%
+        1:   25:void testVillage() {
+        -:   26:
+        1:   27:  int k[10] = {adventurer, feast, baron, mine, great_hall, 
+        -:   28:               remodel, smithy, village, ambassador, embargo};
+        -:   29:            
+        1:   30:  int players = 2;
+        -:   31:  int beforeHandSize, beforeDeckSize, beforeDiscardSize, beforeNumActions;
+        1:   32:  int seed = 1000;
+        -:   33:  struct gameState state; 
+        -:   34:
+        1:   35:  memset(&state, 23, sizeof(struct gameState));
+        1:   36:  initializeGame(players, k, seed, &state);
+call    0 returned 100%
+        -:   37:
+        1:   38:  beforeHandSize = state.handCount[0];
+        1:   39:  beforeDeckSize = state.deckCount[0];
+        1:   40:  beforeDiscardSize = state.discardCount[0];
+        1:   41:  beforeNumActions = state.numActions;
+        -:   42:  
+        1:   43:  printf("TESTING playVillage:\n");
+call    0 returned 100%
+        -:   44:
+        -:   45:  // Last card is "Village".
+        1:   46:  int handPos = state.handCount[0];
+        1:   47:  int currentPlayer = whoseTurn(&state);
+call    0 returned 100%
+        1:   48:  playVillage(currentPlayer, &state, handPos);
+call    0 returned 100%
+        -:   49:
+        -:   50:
+        -:   51:// Test 1 -- Current player should receive 1 new card and discard Remodel.
+        1:   52:  printf("Test: Current player should have exact same number of cards in hand (discard Village, draw card).\n");
+call    0 returned 100%
+        -:   53:
+        1:   54:  asserttrue(state.handCount[0], beforeHandSize);
+call    0 returned 100%
+        -:   55:
+        -:   56:// Test 2 -- Card should come from own deck.
+        1:   57:  printf("Test: card came from player's deck.\n");
+call    0 returned 100%
+        -:   58:  
+        1:   59:  asserttrue(state.deckCount[0] + state.handCount[0] + state.discardCount[0], beforeHandSize + beforeDeckSize + beforeDiscardSize);  
+call    0 returned 100%
+        -:   60:
+        -:   61:// Test 3 -- Players should have two more actions (one net)
+        1:   62:  printf("Test: Players should net one more action.\n");
+call    0 returned 100%
+        -:   63:
+        1:   64:  asserttrue(state.numActions, beforeNumActions);
+call    0 returned 100%
+        -:   65:
+        1:   66:}
+        -:   67:
+function main called 1 returned 100% blocks executed 100%
+        1:   68:int main(int argc, char *argv[]){
+        -:   69:  
+        1:   70:  testVillage();
+call    0 returned 100%
+        1:   71:  return 0;
+        -:   72:}
