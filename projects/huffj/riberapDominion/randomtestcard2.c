@@ -38,36 +38,36 @@ void randomTestVillage(struct gameState *original_state, int player, int handPos
   
   int r;  
   r = playVillage(player, &state_copy, handPos);
-  asserttrue(r, 0);
+  r_asserttrue(r, 0);
   
   // Simulate adding Village to played pile
-  if(!asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
+  if(!r_asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
 
     differences++;
   }    
 
   // Simulate having drawn a card (opponent is unchanged)     
-  if(!asserttrue(original_state->handCount[player], state_copy.handCount[player])){
+  if(!r_asserttrue(original_state->handCount[player], state_copy.handCount[player])){
 
     differences++;
   }  
   
-  if(!asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
+  if(!r_asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
 
     differences++;
   }  
 
-  if(!asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
+  if(!r_asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
 
     differences++;
   }  
   
-  if(!asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
+  if(!r_asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
 
     differences++;
   }   
 
-  if(!asserttrue(original_state->numActions, state_copy.numActions - 1)){
+  if(!r_asserttrue(original_state->numActions, state_copy.numActions - 1)){
 
     differences++;
   } 
@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
                remodel, smithy, village, ambassador, embargo};
 
   initializeGame(2, k, 2000, &state);
-  printf("RANDOM TESTING card_village():\n");
+  printf("RANDOM TESTING playVillage():\n");
 
   int i, n, currentPlayer, handPos; 
   clock_t time_started, time_elapsed;

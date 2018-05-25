@@ -6,7 +6,7 @@
 * Josh Huff 
 * huffj@oregonstate.edu
 * CS362 -- Spring 2018
-* Assignment 4 
+* Assignment 5 
 * -----------------
 *
 * Random Test for Paige Ribera's playAdventurer in dominion.c
@@ -32,40 +32,42 @@ int differences = 0;
 
 void randomTestAdventurer(struct gameState *original_state, int player) {
 
+
   struct gameState state_copy;
   memcpy(&state_copy, original_state, sizeof(struct gameState));
 
   int drawntreasure = 0;
   int cardDrawn = 0;
   int temphand[MAX_HAND];
-  int currentPlayer = whoseTurn(state);  
-  int r;
-  r = playAdventurer(drawntreasure, &state, currentPlayer, cardDrawn, temphand); 
-  asserttrue(r, 0);
-
+  int currentPlayer = whoseTurn(&state_copy);   
+  
+  int r;  
+  r = playAdventurer(drawntreasure, &state_copy, currentPlayer, cardDrawn, temphand); 
+  r_asserttrue(r, 0);  
+  
   // Simulate adding Adventurer to played pile
-  if(!asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
+  if(!r_asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
 
     differences++;
   }  
 
   // Simulate having two new cards in hand (opponent is unchanged)
-  if(!asserttrue(original_state->handCount[player], state_copy.handCount[player] - 1)){
+  if(!r_asserttrue(original_state->handCount[player], state_copy.handCount[player] + 1)){
 
     differences++;
   }
 
-  if(!asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
+  if(!r_asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
 
     differences++;
   }  
 
-  if(!asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
+  if(!r_asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
 
     differences++;
   }  
   
-  if(!asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
+  if(!r_asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
 
     differences++;
   }   
@@ -77,7 +79,7 @@ void randomTestAdventurer(struct gameState *original_state, int player) {
   for(j = 0; j < 2; j++){    
     
     currentCard = state_copy.hand[player][drawnLast];
-    if(!asserttrue(currentCard > 3 && currentCard < 7, 1)){
+    if(!r_asserttrue(currentCard > 3 && currentCard < 7, 1)){
 
       differences++;
     }
@@ -89,7 +91,7 @@ void randomTestAdventurer(struct gameState *original_state, int player) {
   for (j = 0; j < discarded; j++){
   
     currentCard = state_copy.discard[player][discardTop];
-    if(!asserttrue(currentCard > 3 && currentCard < 7, 0)){
+    if(!r_asserttrue(currentCard > 3 && currentCard < 7, 0)){
 
       differences++;
     }

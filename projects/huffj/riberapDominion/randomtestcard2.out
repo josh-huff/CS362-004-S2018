@@ -1,0 +1,9 @@
+RANDOM TESTING playVillage():
+Differences:10000
+File 'randomtestcard2.c'
+Lines executed:87.50% of 48
+Branches executed:100.00% of 26
+Taken at least once:73.08% of 26
+Calls executed:100.00% of 26
+Creating 'randomtestcard2.c.gcov'
+

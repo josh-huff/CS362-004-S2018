@@ -6,7 +6,7 @@
 * Josh Huff 
 * huffj@oregonstate.edu
 * CS362 -- Spring 2018
-* Assignment 4 
+* Assignment 5 
 * -----------------
 *
 * Random Test for Paige Ribera's playSmithy in dominion.c
@@ -37,31 +37,31 @@ void randomTestSmithy(struct gameState *original_state, int player, int handPos)
 
   int r;  
   r = playSmithy(player, &state_copy, handPos);
-  asserttrue(r, 0);
+  r_asserttrue(r, 0);
   
   // Simulate adding Smithy to played pile
-  if(!asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
+  if(!r_asserttrue(original_state->playedCardCount, state_copy.playedCardCount - 1)){
 
     differences++;
   }    
 
   // Simulate having drawn three cards (opponent is unchanged)     
-  if(!asserttrue(original_state->handCount[player], state_copy.handCount[player] - 2)){
+  if(!r_asserttrue(original_state->handCount[player], state_copy.handCount[player] - 2)){
 
     differences++;
   }  
   
-  if(!asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
+  if(!r_asserttrue(original_state->deckCount[!player], state_copy.deckCount[!player])){
 
     differences++;
   }  
 
-  if(!asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
+  if(!r_asserttrue(original_state->handCount[!player], state_copy.handCount[!player])){
 
     differences++;
   }  
   
-  if(!asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
+  if(!r_asserttrue(original_state->discardCount[!player], state_copy.discardCount[!player])){
 
     differences++;
   }    
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]){
                mine, cutpurse, sea_hag, tribute, smithy};
 
   initializeGame(2, k, 2000, &state);
-  printf("RANDOM TESTING card_smithy():\n");
+  printf("RANDOM TESTING playSmithy():\n");
   
   int i, n, currentPlayer, handPos; 
   clock_t time_started, time_elapsed;

@@ -39,9 +39,9 @@ void testAdventurer() {
   memset(&state, 23, sizeof(struct gameState));
   initializeGame(players, k, seed, &state);
 
-  beforeHandSize = state.handCount[0];
-  beforeDeckSize = state.deckCount[0];
-  beforeDiscardSize = state.discardCount[0];
+  beforeHandSize = state.handCount[currentPlayer];
+  beforeDeckSize = state.deckCount[currentPlayer];
+  beforeDiscardSize = state.discardCount[currentPlayer];
   
   int i;
   for (i = 0; i < 10; i++){
