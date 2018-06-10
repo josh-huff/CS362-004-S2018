@@ -33,11 +33,14 @@ public class UrlValidatorTest extends TestCase {
                          };
 
     // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
-    String[] invalidPath = { "path|test", "path#test", "path^test", /"path`test" };
+    String[] invalidPath = { "/path|test", "/path#test", "/path^test", "/path`test" };
     
     // Valid Authorities are described in RFC 3986
     String[] validAuth = {};
- 
+
+    // Invalid Authorities are described in RFC 3986
+    String[] invalidAuth = {};
+
     // Huff's contribution: programming-based testing   
     public void testIsValid()
     {
@@ -52,7 +55,10 @@ public class UrlValidatorTest extends TestCase {
             queryFails = 0,
             fragmentFails = 0;   
 
-        // Call helper that
+        for(){
+        
+            
+        }
         
         // Call isValid with composite string representing valid URLs
         // If assertion fails, that iteration can lead to finding the exact fault
@@ -60,7 +66,9 @@ public class UrlValidatorTest extends TestCase {
         for(int i = 0; i < validScheme.length; i++){
         
             compStr = String.join(validScheme[i] +  +   );
+            
         }
+        
         // Call isValid with composite string representing invalid URLs  
 
     }
