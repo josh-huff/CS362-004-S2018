@@ -40,10 +40,10 @@ public class UrlValidatorTest extends TestCase {
 
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
-        enum ComponentType{
+        public enum URLComponentType{
 
-            scheme, authority, path, query, fragment
-        }
+            SCHEME, AUTHORITY, PATH, QUERY, FRAGMENT
+        };
 
         String compStr;
 
