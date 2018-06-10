@@ -4,99 +4,73 @@ import junit.framework.TestCase;
 
 public class UrlValidatorTest extends TestCase {
 
-    /*
-
-        ---- IMPORTANT NOTE ----
-
-    John Eleen found a bug when performing input partition.
-    The bug precludes all valid schemes besides http and all valid port numbers in authorities.
-    If he had not, this would be the validScheme array passed to our unit test.
-
-        // Valid schemes are described in RFC 3986
-        // Because a scheme is optional, the array starts with the empty string.
-       String[] validScheme =  { "scheme",
-               //"",
-               "http://",  "https://", "ftp://", "ftps://",
-               "http+://", "ht-tp://", "h.t.t.p.://"
-       };
-
-    Also, this would be the invalid authority array.
-
-        String[] invalidAuth = { "authority", "256.255.255.255", "google.255" };
-
-    */
-    String[] validScheme = { "scheme", "http://" };
-
-    // Invalid schemes start with a numeric or contain invalid characters. These are a small sample of what should fail.
-    String[] invalidScheme = { "scheme", "0http://", "http^://" };
-
-    // Valid Authorities are described in RFC 3986
-    String[] validAuth = { "authority", "google.com", "255.255.255.255", "google.co.uk" };
-
-    // Invalid authorities are empty strings, octets and ports out of range, and invalid top level domains
-    // Empty strings are excluded from the test to accommodate a bug and still test the other cases.
-    String[] invalidAuth = { "authority"};
-
-    // This array's elements each contain a different valid path character
-    // Valid path characters can be found in RFC 3986
-    // Because a path is optional, the array starts with the empty string.
-    String[] validPath = { "path", "",
-            "/pathtest", "/PATHTEST", "/pathtest01", "/path.test",
-            "/path-test", "/path_test",
-            // Commented out in the middle of testing to check subsequent cases: "/path~test",
-            "/path!test", "/path$test", "/path&test", "/path'test",
-            "/path(test", "/path)test", "/path*test", "/path+test",
-            "/path,test", "/path;test", "/path=test", "/path:test",
-            "/path@test"
-    };
-
-    // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
-    String[] invalidPath = { "path", "/path|test", "/path^test", "/path`test" };
-
-    // Valid query characters (basically any non-whitespace character) can be found in RFC 3986
-    // Because a query is optional, the array starts with the empty string.
-    String[] validQuery = { "query", "", "?", "quarter?name=SP18&final=YES" };
-
-    // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
-    String[] invalidQuery = { "query", "? huh" };
-
     // Huff's contribution: programming-based testing
     public void testIsValid() {
+    
+        /*
+
+            ---- IMPORTANT NOTE ----
+
+        John Eleen found a bug when performing input partition.
+        The bug precludes all valid schemes besides http and all valid port numbers in authorities.
+        If he had not, this would be the validScheme array passed to our unit test.
+
+            // Valid schemes are described in RFC 3986
+            // Because a scheme is optional, the array starts with the empty string.
+           String[] validScheme =  { "scheme",
+                   //"",
+                   "http://",  "https://", "ftp://", "ftps://",
+                   "http+://", "ht-tp://", "h.t.t.p.://"
+           };
+
+        Also, this would be the invalid authority array.
+
+            String[] invalidAuth = { "authority", "256.255.255.255", "google.255" };
+
+        */
+        String[] validScheme = { "scheme", "http://" };
+
+        // Invalid schemes start with a numeric or contain invalid characters. These are a small sample of what should fail.
+        String[] invalidScheme = { "scheme", "0http://", "http^://" };
+
+        // Valid Authorities are described in RFC 3986
+        String[] validAuth = { "authority", "google.com", "255.255.255.255", "google.co.uk" };
+
+        // Invalid authorities are empty strings, octets and ports out of range, and invalid top level domains
+        // Empty strings are excluded from the test to accommodate a bug and still test the other cases.
+        String[] invalidAuth = { "authority"};
+
+        // This array's elements each contain a different valid path character
+        // Valid path characters can be found in RFC 3986
+        // Because a path is optional, the array starts with the empty string.
+        String[] validPath = { "path", "",
+                "/pathtest", "/PATHTEST", "/pathtest01", "/path.test",
+                "/path-test", "/path_test",
+                // Commented out in the middle of testing to check subsequent cases: "/path~test",
+                "/path!test", "/path$test", "/path&test", "/path'test",
+                "/path(test", "/path)test", "/path*test", "/path+test",
+                "/path,test", "/path;test", "/path=test", "/path:test",
+                "/path@test"
+        };
+
+        // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
+        String[] invalidPath = { "path", "/path|test", "/path^test", "/path`test" };
+
+        // Valid query characters (basically any non-whitespace character) can be found in RFC 3986
+        // Because a query is optional, the array starts with the empty string.
+        String[] validQuery = { "query", "", "?", "quarter?name=SP18&final=YES" };
+
+        // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
+        String[] invalidQuery = { "query", "? huh" };    
 
         String[][] valids = {validScheme, validAuth, validPath, validQuery};
         String[][] invalids = {invalidScheme, invalidAuth, invalidPath, invalidQuery};
-
-        // Counters to track which subsets of the URL cause failures.
-        // Pattern fails shouldn't be possible; using a composite string forces the URL to follow the pattern.
-        int schemeFails = 0,
-                authorityFails = 0,
-                pathFails = 0,
-                queryFails = 0;
 
         for (int i = 0; i < valids.length; i++) {
 
             for (int j = 1; j < valids[i].length; j++) {
 
-                if (!accepted(valids[i], valids[i][j], j, "accepted")) {
-
-                    switch (valids[i][0]) {
-
-                        case "scheme":
-                            schemeFails++;
-                            break;
-                        case "authority":
-                            authorityFails++;
-                            break;
-                        case "path":
-                            pathFails++;
-                            break;
-                        case "query":
-                            queryFails++;
-                            break;
-                        default:
-                            System.out.println("Problem with switch statement in testIsValid()'s valids loop");
-                    }
-                }
+                accepted(valids[i], valids[i][j], j, "accepted");
             }
         }
 
@@ -104,37 +78,23 @@ public class UrlValidatorTest extends TestCase {
 
             for (int j = 1; j < invalids[i].length; j++) {
 
-                if (!accepted(invalids[i], invalids[i][j], j, "rejected")) {
-
-                    switch (invalids[i][0]) {
-
-                        case "scheme":
-                            schemeFails++;
-                            break;
-                        case "authority":
-                            authorityFails++;
-                            break;
-                        case "path":
-                            pathFails++;
-                            break;
-                        case "query":
-                            queryFails++;
-                            break;
-                        default:
-                            System.out.println("Problem with switch statement in testIsValid()'s invalids loop");
-                    }
-                }
+                accepted(invalids[i], invalids[i][j], j, "rejected");
             }
         }
 
-        // Print totals of failures
-        System.out.println("Number of scheme failures: " + Integer.toString(schemeFails));
-        System.out.println("Number of authority failures: " + Integer.toString(authorityFails));
-        System.out.println("Number of path failures: " + Integer.toString(pathFails));
-        System.out.println("Number of query failures: " + Integer.toString(queryFails));
+        System.out.println("All tests successful.");
     }
 
-    private boolean accepted(String[] inputArray, String element, int position, String expected) {
+    /*
+    
+    Takes an array of test cases, a particular element in it, that element's position, 
+    and whether the string is supposed to be rejected or accepted.
+    
+    Depending on the element's type (which is provided by the array's 0th index, 
+    a known valid component is attached to it and the composite string istested for overall validity
+    
+    */
+    private void accepted(String[] inputArray, String element, int position, String expected) {
 
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
@@ -171,14 +131,12 @@ public class UrlValidatorTest extends TestCase {
 
             errMsg = "Valid " + componentType + " at index " + Integer.toString(position) + " has been rejected.";
             assertTrue(errMsg, urlVal.isValid(compStr));
-            return urlVal.isValid(compStr);
         }
 
         else {
 
             errMsg = "Invalid " + componentType + " at index " + Integer.toString(position) + " has been accepted.";
             assertFalse(errMsg, urlVal.isValid(compStr));
-            return ! urlVal.isValid(compStr);
         }
     }
 }
