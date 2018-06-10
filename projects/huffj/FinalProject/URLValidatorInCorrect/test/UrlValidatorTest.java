@@ -20,16 +20,16 @@ public class UrlValidatorTest extends TestCase {
                "http+://", "ht-tp://", "h.t.t.p.://"
        };
     */
-    String[] validScheme = {"scheme", "http://"};
+    String[] validScheme = { "scheme", "http://" };
 
     // Invalid schemes start with a numeric or contain invalid characters. These are a small sample of what should fail.
-    String[] invalidScheme = {"scheme", "0http://", "http^://"};
+    String[] invalidScheme = { "scheme", "0http://", "http^://" };
 
     // Valid Authorities are described in RFC 3986
-    String[] validAuth = {"authority", "google.com", "255.255.255.255", "google.co.uk"};
+    String[] validAuth = { "authority", "google.com", "255.255.255.255", "google.co.uk" };
 
     // Invalid authorities are empty strings, octets and ports out of range, and invalid top level domains
-    String[] invalidAuth = {"authority", "", "256.255.255.255", "google.255"};
+    String[] invalidAuth = { "authority", "", "256.255.255.255", "google.255" };
 
     // This array's elements each contain a different valid path character
     // Valid path characters can be found in RFC 3986
@@ -45,7 +45,15 @@ public class UrlValidatorTest extends TestCase {
     };
 
     // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
-    String[] invalidPath = {"path", "/path|test", "/path#test", "/path^test", "/path`test"};
+    String[] invalidPath = { "path", "/path|test", "/path#test", "/path^test", "/path`test" };
+
+    // This array's elements each contain a different valid path character
+    // Valid path characters can be found in RFC 3986
+    // Because a path is optional, the array starts with the empty string.
+    String[] validQuery = { "query", "", "?", "quarter?name=SP18&final=YES" };
+
+    // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
+    String[] invalidQuery = { "query", "? huh" };
 
     // Huff's contribution: programming-based testing
     public void testIsValid() {
