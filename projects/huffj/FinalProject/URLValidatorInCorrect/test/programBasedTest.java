@@ -122,21 +122,21 @@ public class UrlValidatorTest extends TestCase {
 
         if(expected == "accepted"){
 
-            errMsg = "Valid " + componentType + " at index " Integer.toString(position) + " has been rejected."
+            errMsg = "Valid " + componentType + " at index " Integer.toString(position) + " has been rejected.";
         }
         else{
 
-            errMsg = "Invalid " + componentType + " at index " + Integer.toString(position) + " has been accepted."
+            errMsg = "Invalid " + componentType + " at index " + Integer.toString(position) + " has been accepted.";
         }
 
-        if(componentType == "scheme") {
+        if(componentType == "scheme"){
 
             knownValid = "google.com";
             compStr = element + knownValid;
         }
 
         assertTrue(errMsg, urlVal.isValid(compStr));
-        return urlVal.isValid(compStr));
+        return urlVal.isValid(compStr);
 
         /*
         if(componentType == "authority") {
