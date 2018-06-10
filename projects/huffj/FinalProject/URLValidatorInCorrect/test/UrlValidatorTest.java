@@ -58,7 +58,7 @@ public class UrlValidatorTest extends TestCase {
     // Huff's contribution: programming-based testing
     public void testIsValid() {
 
-        String[][] valids = {validScheme, validAuth, validPath}; // FOR TESTING ONLY
+        String[][] valids = {validScheme, validAuth, validPath, validQuery}; // FOR TESTING ONLY
 
         // Counters to track which subsets of the URL cause failures.
         // Pattern fails shouldn't be possible; using a composite string forces the URL to follow the pattern.
@@ -160,6 +160,12 @@ public class UrlValidatorTest extends TestCase {
         if (componentType.equals("path")) {
 
             knownValid = "http://";
+            compStr = knownValid + element;
+        }
+
+        if (componentType.equals("query")) {
+
+            knownValid = "http://google.com";
             compStr = knownValid + element;
         }
 
