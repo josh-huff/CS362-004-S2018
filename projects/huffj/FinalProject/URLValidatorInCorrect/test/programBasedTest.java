@@ -39,7 +39,7 @@ public class UrlValidatorTest extends TestCase {
     // Huff's contribution: programming-based testing   
     public void testIsValid(){
 
-        UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+//        UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
         String compStr;
 //        String[][] valids = {validScheme, validPath, validAuth};
@@ -66,12 +66,16 @@ public class UrlValidatorTest extends TestCase {
                             break;
                         case "authority":
                             authorityFails++;
+                            break;
                         case "path":
                             pathFails++;
+                            break;
                         case "query":
                             queryFails++;
+                            break;
                         case "fragment":
                             fragmentFails++;
+                            break;
                         default:
                             System.out.println("Problem with switch statement in testIsValid()");
                     }
@@ -107,7 +111,9 @@ public class UrlValidatorTest extends TestCase {
 
     }
 
-    public boolean accepted(UrlValidator urlVal, String[] inputArray, String element, int position, String expected){
+    public boolean accepted(String[] inputArray, String element, int position, String expected){
+
+        UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
         String compStr;
         String componentType = inputArray[0];
@@ -141,7 +147,5 @@ public class UrlValidatorTest extends TestCase {
 
         }
 */
-
-
     }
 }
