@@ -47,9 +47,8 @@ public class UrlValidatorTest extends TestCase {
     // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
     String[] invalidPath = { "path", "/path|test", "/path#test", "/path^test", "/path`test" };
 
-    // This array's elements each contain a different valid path character
-    // Valid path characters can be found in RFC 3986
-    // Because a path is optional, the array starts with the empty string.
+    // Valid query characters (basically any non-whitespace character) can be found in RFC 3986
+    // Because a query is optional, the array starts with the empty string.
     String[] validQuery = { "query", "", "?", "quarter?name=SP18&final=YES" };
 
     // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
@@ -58,15 +57,14 @@ public class UrlValidatorTest extends TestCase {
     // Huff's contribution: programming-based testing
     public void testIsValid() {
 
-        String[][] valids = {validScheme, validAuth, validPath, validQuery}; // FOR TESTING ONLY
+        String[][] valids = {validScheme, validAuth, validPath, validQuery};
 
         // Counters to track which subsets of the URL cause failures.
         // Pattern fails shouldn't be possible; using a composite string forces the URL to follow the pattern.
         int schemeFails = 0,
-                authorityFails = 0,
-                pathFails = 0,
-                queryFails = 0,
-                fragmentFails = 0;
+            authorityFails = 0,
+            pathFails = 0,
+            queryFails = 0;
 
         for (int i = 0; i < valids.length; i++) {
 
@@ -87,9 +85,6 @@ public class UrlValidatorTest extends TestCase {
                             break;
                         case "query":
                             queryFails++;
-                            break;
-                        case "fragment":
-                            fragmentFails++;
                             break;
                         default:
                             System.out.println("Problem with switch statement in testIsValid()'s valids loop");
@@ -118,9 +113,6 @@ public class UrlValidatorTest extends TestCase {
                         case "query":
                             queryFails++;
                             break;
-                        case "fragment":
-                            fragmentFails++;
-                            break;
                         default:
                             System.out.println("Problem with switch statement in testIsValid()'s invalids loop");
                     }
@@ -133,7 +125,6 @@ public class UrlValidatorTest extends TestCase {
         System.out.println("Number of authority failures: " + Integer.toString(authorityFails));
         System.out.println("Number of path failures: " + Integer.toString(pathFails));
         System.out.println("Number of query failures: " + Integer.toString(queryFails));
-        System.out.println("Number of fragment failures: " + Integer.toString(fragmentFails));
     }
 
     private boolean accepted(String[] inputArray, String element, int position, String expected) {
@@ -168,7 +159,6 @@ public class UrlValidatorTest extends TestCase {
             knownValid = "http://google.com";
             compStr = knownValid + element;
         }
-
 
         if (expected.equals("accepted")) {
 
