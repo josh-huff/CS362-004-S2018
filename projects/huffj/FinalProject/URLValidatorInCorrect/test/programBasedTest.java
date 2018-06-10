@@ -13,12 +13,12 @@ public class UrlValidatorTest extends TestCase {
     // Valid schemes are described in RFC 3986  
     // Because a scheme is optional, the array starts with the empty string.
     String[] validSchemeStrs = {  "", 
-                                  "http",  "https", "ftp", "ftps", 
-                                  "http+", "ht-tp", "h.t.t.p." 
+                                  "http://",  "https://", "ftp://", "ftps://", 
+                                  "http+://", "ht-tp://", "h.t.t.p.://" 
                                };
 
-    // Invalid schemes start with a numeric, contain invalid characters, . These are a small sample of what should fail.
-    String[] invalidScheme = { "0http", "http^", "", /"path`test" };
+    // Invalid schemes start with a numeric or contain invalid characters. These are a small sample of what should fail.
+    String[] invalidScheme = { "0http://", "http^://"};
       
  
     // This array's elements each contain a different valid path character
@@ -42,6 +42,8 @@ public class UrlValidatorTest extends TestCase {
     public void testIsValid()
     {
 
+        String compStr;
+
         // Counters to track which subsets of the URL cause failures.
         int patternFails = 0, // Shouldn't be possible; using a composite string forces the URL to follow the pattern.
             schemeFails = 0,
@@ -57,7 +59,7 @@ public class UrlValidatorTest extends TestCase {
         // e.g. if path$test fails, then isValid is incorrectly disallowing the $ character in URLs.
         for(int i = 0; i <  ; i++){
         
-            validScheme[i] + 
+            compStr = String.join(validScheme[i] +  +   );
         }
         // Call isValid with composite string representing invalid URLs  
 
