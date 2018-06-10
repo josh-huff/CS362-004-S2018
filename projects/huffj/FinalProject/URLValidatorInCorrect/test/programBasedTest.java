@@ -122,7 +122,7 @@ public class UrlValidatorTest extends TestCase {
 
         if(expected == "accepted"){
 
-            errMsg = "Valid " + componentType + " at index " Integer.toString(position) + " has been rejected.";
+            errMsg = "Valid " + componentType + " at index " + Integer.toString(position) + " has been rejected.";
         }
         else{
 
