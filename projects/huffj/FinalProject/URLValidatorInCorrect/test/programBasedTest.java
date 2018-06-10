@@ -30,16 +30,16 @@ public class UrlValidatorTest extends TestCase {
     String[] invalidPath = { "/path|test", "/path#test", "/path^test", "/path`test" };
     
     // Valid Authorities are described in RFC 3986
-    String[] validAuth = {"google.com", "255.255.255.255", "google.co.uk"};
+    String[] validAuth = {"google.com", "google.com:80", "255.255.255.255", "google.co.uk"};
 
-    // Invalid authorities are empty strings, octets out of byte range, and invalid top level domains
-    String[] invalidAuth = {"", "256.255.255.255", "google.255"};
+    // Invalid authorities are empty strings, octets and ports out of range, and invalid top level domains
+    String[] invalidAuth = {"", "256.255.255.255", "google.com:70000", "google.255"};
 
     // Huff's contribution: programming-based testing   
     public void testIsValid()
     {
 
-        UrlValidator urlValidator = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+        UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
         String compStr;
 
@@ -61,8 +61,9 @@ public class UrlValidatorTest extends TestCase {
         // e.g. if path$test fails, then isValid is incorrectly disallowing the $ character in URLs.
         for(int i = 0; i < validScheme.length; i++){
         
-            compStr = String.join(validScheme[i] + "google.com" +   );
-            
+            compStr = validScheme[i] + "google.com";
+            errMsg = "Valid scheme at index " + Integer.toString(i) + " has being rejected.";
+            assertTrue(errMsg, urlVal.isValid(compStr));
         }
         
         // Call isValid with composite string representing invalid URLs  
