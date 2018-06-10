@@ -36,7 +36,7 @@ public class UrlValidatorTest extends TestCase {
     String[] invalidPath = { "/path|test", "/path#test", "/path^test", "/path`test" };
     
     // Valid Authorities are described in RFC 3986
-    String[] validAuth = {};
+    String[] validAuth = {"google.com", "255.255.255.255", "google.co.uk"};
 
     // Invalid Authorities are described in RFC 3986
     String[] invalidAuth = {};
