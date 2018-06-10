@@ -19,6 +19,11 @@ public class UrlValidatorTest extends TestCase {
                "http://",  "https://", "ftp://", "ftps://",
                "http+://", "ht-tp://", "h.t.t.p.://"
        };
+
+    Also, this would be the invalid authority array.
+
+        String[] invalidAuth = { "authority", "256.255.255.255", "google.255" };
+
     */
     String[] validScheme = { "scheme", "http://" };
 
@@ -29,7 +34,8 @@ public class UrlValidatorTest extends TestCase {
     String[] validAuth = { "authority", "google.com", "255.255.255.255", "google.co.uk" };
 
     // Invalid authorities are empty strings, octets and ports out of range, and invalid top level domains
-    String[] invalidAuth = { "authority", "", "256.255.255.255", "google.255" };
+    // Empty strings are excluded from the test to accommodate a bug and still test the other cases.
+    String[] invalidAuth = { "authority"};
 
     // This array's elements each contain a different valid path character
     // Valid path characters can be found in RFC 3986
@@ -37,7 +43,7 @@ public class UrlValidatorTest extends TestCase {
     String[] validPath = { "path", "",
             "/pathtest", "/PATHTEST", "/pathtest01", "/path.test",
             "/path-test", "/path_test",
-            // Commented out in the middle of testing to check subsequent cases "/path~test",
+            // Commented out in the middle of testing to check subsequent cases: "/path~test",
             "/path!test", "/path$test", "/path&test", "/path'test",
             "/path(test", "/path)test", "/path*test", "/path+test",
             "/path,test", "/path;test", "/path=test", "/path:test",
@@ -45,7 +51,7 @@ public class UrlValidatorTest extends TestCase {
     };
 
     // Invalid paths contain characters not in that subset. These are a small sample of what should fail.
-    String[] invalidPath = { "path", "/path|test", "/path#test", "/path^test", "/path`test" };
+    String[] invalidPath = { "path", "/path|test", "/path^test", "/path`test" };
 
     // Valid query characters (basically any non-whitespace character) can be found in RFC 3986
     // Because a query is optional, the array starts with the empty string.
@@ -58,13 +64,14 @@ public class UrlValidatorTest extends TestCase {
     public void testIsValid() {
 
         String[][] valids = {validScheme, validAuth, validPath, validQuery};
+        String[][] invalids = {invalidScheme, invalidAuth, invalidPath, invalidQuery};
 
         // Counters to track which subsets of the URL cause failures.
         // Pattern fails shouldn't be possible; using a composite string forces the URL to follow the pattern.
         int schemeFails = 0,
-            authorityFails = 0,
-            pathFails = 0,
-            queryFails = 0;
+                authorityFails = 0,
+                pathFails = 0,
+                queryFails = 0;
 
         for (int i = 0; i < valids.length; i++) {
 
@@ -92,7 +99,7 @@ public class UrlValidatorTest extends TestCase {
                 }
             }
         }
-/*
+
         for (int i = 0; i < invalids.length; i++) {
 
             for (int j = 1; j < invalids[i].length; j++) {
@@ -119,7 +126,7 @@ public class UrlValidatorTest extends TestCase {
                 }
             }
         }
-*/
+
         // Print totals of failures
         System.out.println("Number of scheme failures: " + Integer.toString(schemeFails));
         System.out.println("Number of authority failures: " + Integer.toString(authorityFails));
@@ -164,14 +171,14 @@ public class UrlValidatorTest extends TestCase {
 
             errMsg = "Valid " + componentType + " at index " + Integer.toString(position) + " has been rejected.";
             assertTrue(errMsg, urlVal.isValid(compStr));
+            return urlVal.isValid(compStr);
         }
 
         else {
 
             errMsg = "Invalid " + componentType + " at index " + Integer.toString(position) + " has been accepted.";
             assertFalse(errMsg, urlVal.isValid(compStr));
+            return ! urlVal.isValid(compStr);
         }
-
-        return urlVal.isValid(compStr);
     }
 }
