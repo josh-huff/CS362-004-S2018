@@ -36,10 +36,14 @@ public class UrlValidatorTest extends TestCase {
     String[] invalidAuth = {"", "256.255.255.255", "google.com:70000", "google.255"};
 
     // Huff's contribution: programming-based testing   
-    public void testIsValid()
-    {
+    public void testIsValid(){
 
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+
+        enum ComponentType{
+
+            scheme, authority, path, query, fragment
+        }
 
         String compStr;
 
@@ -50,26 +54,41 @@ public class UrlValidatorTest extends TestCase {
             pathFails = 0,
             queryFails = 0,
             fragmentFails = 0;   
-/*
-        for(){
-        
-            
-        }
-*/
-        // Call isValid with composite string representing valid URLs
+
+        // Call isValid with composite string representing known valid schemes with known valid bodies
         // If assertion fails, that iteration can lead to finding the exact fault
-        // e.g. if path$test fails, then isValid is incorrectly disallowing the $ character in URLs.
+        // e.g. if http+:// fails, then isValid is incorrectly disallowing the + character in schemes.
         for(int i = 0; i < validScheme.length; i++){
         
             compStr = validScheme[i] + "google.com";
             errMsg = "Valid scheme at index " + Integer.toString(i) + " has being rejected.";
             assertTrue(errMsg, urlVal.isValid(compStr));
+            if(! urlVal.isValid(compStr)){schemeFails++;}
         }
-        
-        // Call isValid with composite string representing invalid URLs  
+
+        // Call isValid with composite string representing known invalid schemes and known valid bodies.
+        // If assertion fails, that iteration can lead to finding the exact fault
+        // e.g. if 0http:// succeeds, then isValid is incorrectly permitting a numeric character in front of a scheme.
+        for(int i = 0; i < invalidScheme.length; i++){
+
+            compStr = invalidScheme[i] + "google.com";
+            errMsg = "Invalid scheme at index " + Integer.toString(i) + " has being accepted.";
+            assertTrue(errMsg, urlVal.isValid(compStr));
+            if(! urlVal.isValid(compStr)){schemeFails++;}
+        }
+
+        // Print totals of failures
+    }
+
+    public void
+
+    public boolean accepted(){
+
 
     }
-   
+
+    public boolean rejected(){
 
 
+    }
 }
